@@ -5,4 +5,7 @@
 // DO NOT MODIFY THIS FILE! It is auto-generated from data/maps/*/map.json
 //
 
+// MAP_FALLARBOR_TOWN_POKEMON_CENTER_1F
+#define LOCALID_FALLARBOR_NURSE 1
+
 #endif // GUARD_CONSTANTS_MAP_EVENT_IDS_H
