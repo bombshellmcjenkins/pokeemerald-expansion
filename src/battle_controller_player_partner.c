@@ -9,6 +9,7 @@
 #include "battle_setup.h"
 #include "battle_tower.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "bg.h"
 #include "data.h"
 #include "item_use.h"

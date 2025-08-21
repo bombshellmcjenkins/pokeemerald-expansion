@@ -1583,7 +1583,7 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
 
     friendship = MAX_FRIENDSHIP;
     // Give the chosen Pokémon its specified moves.
-    for (j = 0; j < MAX_MON_MOVES; j++)
+    for (j = 0; j < MAX_LEARNED_MOVES; j++)
     {
         move = fmon->moves[j];
         if (flags & FLAG_FRONTIER_MON_FACTORY && move == MOVE_RETURN)
@@ -1781,7 +1781,7 @@ static void UNUSED Unused_CreateApprenticeMons(u16 trainerId, u8 firstMonId)
     {
         CreateMonWithEVSpread(&gEnemyParty[firstMonId + i], apprentice->party[i].species, level, fixedIV, 8);
         friendship = MAX_FRIENDSHIP;
-        for (j = 0; j < MAX_MON_MOVES; j++)
+        for (j = 0; j < MAX_LEARNED_MOVES; j++)
         {
             if (gMovesInfo[apprentice->party[i].moves[j]].effect == EFFECT_FRUSTRATION)
                 friendship = 0;

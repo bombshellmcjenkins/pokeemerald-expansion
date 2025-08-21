@@ -519,9 +519,9 @@ static const struct WindowTemplate sMoveSelectWindowTemplate =
 {
     .bg = 2,
     .tilemapLeft = 19,
-    .tilemapTop = 11,
+    .tilemapTop = 9,
     .width = 10,
-    .height = 8,
+    .height = 10,
     .paletteNum = 14,
     .baseBlock = 0x2E9,
 };

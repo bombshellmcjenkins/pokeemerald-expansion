@@ -5,6 +5,7 @@
 #include "battle_interface.h"
 #include "battle_gimmick.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "battle_setup.h"
 #include "battle_util.h"
 #include "item.h"
@@ -25,7 +26,7 @@ void AssignUsableGimmicks(void)
         gBattleStruct->gimmick.usableGimmick[battler] = GIMMICK_NONE;
         for (gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
         {
-            if (CanActivateGimmick(battler, gimmick))
+            if (CanActivateGimmick(battler, gimmick)) // Links to battle_z_move, always true
             {
                 gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
                 break;
@@ -95,8 +96,14 @@ bool32 ShouldTrainerBattlerUseGimmick(u32 battler, enum Gimmick gimmick)
 // Returns whether a trainer has used a gimmick during a battle.
 bool32 HasTrainerUsedGimmick(u32 battler, enum Gimmick gimmick)
 {
+	// Check whether the gimmick is Z move, and gtfo so we don't make it unusable
+	if (gimmick == GIMMICK_Z_MOVE || gimmick == GIMMICK_BIRTHRIGHT)
+	{
+		return FALSE;
+	}
+	
     // Check whether partner battler has used gimmick or plans to during turn.
-    if (IsDoubleBattle()
+    else if (IsDoubleBattle()
         && IsPartnerMonFromSameTrainer(battler)
         && (gBattleStruct->gimmick.activated[BATTLE_PARTNER(battler)][gimmick]
         || ((gBattleStruct->gimmick.toActivate & (1u << BATTLE_PARTNER(battler))

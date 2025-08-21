@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "malloc.h"
 #include "battle.h"
 #include "battle_anim.h"
@@ -25,7 +26,7 @@
 #define CHECK_MOVE_FLAG(flag)                                                                                   \
     s32 i;                                                                                                      \
     u16 *moves = GetMovesArray(battler);                                                                        \
-    for (i = 0; i < MAX_MON_MOVES; i++)                                                                         \
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)                                                                         \
     {                                                                                                           \
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && gMovesInfo[moves[i]].flag)                 \
             return TRUE;                                                                                        \
@@ -121,7 +122,7 @@ void RecordLastUsedMoveBy(u32 battlerId, u32 move)
 void RecordKnownMove(u32 battlerId, u32 move)
 {
     s32 i;
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (BATTLE_HISTORY->usedMoves[battlerId][i] == move)
             break;
@@ -136,7 +137,7 @@ void RecordKnownMove(u32 battlerId, u32 move)
 
 void RecordAllMoves(u32 battler)
 {
-    memcpy(AI_PARTY->mons[GetBattlerSide(battler)][gBattlerPartyIndexes[battler]].moves, gBattleMons[battler].moves, MAX_MON_MOVES * sizeof(u16));
+    memcpy(AI_PARTY->mons[GetBattlerSide(battler)][gBattlerPartyIndexes[battler]].moves, gBattleMons[battler].moves, MAX_LEARNED_MOVES * sizeof(u16));
 }
 
 void RecordAbilityBattle(u32 battlerId, u32 abilityId)
@@ -188,7 +189,7 @@ static bool32 ShouldFailForIllusion(u32 illusionSpecies, u32 battlerId)
         return FALSE;
 
     // Don't fall for Illusion if the mon used a move it cannot know.
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         u32 move = BATTLE_HISTORY->usedMoves[battlerId][i];
         if (move == MOVE_NONE)
@@ -251,7 +252,7 @@ void SetBattlerData(u32 battlerId)
         if (AI_PARTY->mons[side][gBattlerPartyIndexes[battlerId]].heldEffect == 0)
             gBattleMons[battlerId].item = 0;
 
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_LEARNED_MOVES; i++)
         {
             if (AI_PARTY->mons[side][gBattlerPartyIndexes[battlerId]].moves[i] == 0)
                 gBattleMons[battlerId].moves[i] = 0;
@@ -326,7 +327,7 @@ bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler)
 {
     int i;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         u32 move = gBattleResources->battleHistory->usedMoves[opposingBattler][i];
         if (gMovesInfo[move].effect == EFFECT_PROTECT && move != MOVE_ENDURE)
@@ -356,7 +357,7 @@ bool32 MovesWithCategoryUnusable(u32 attacker, u32 target, u32 category)
     u32 unusable = AI_DATA->moveLimitations[attacker];
     u16 *moves = GetMovesArray(attacker);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE
             && moves[i] != MOVE_UNAVAILABLE
@@ -1159,7 +1160,7 @@ bool32 CanTargetFaintAi(u32 battlerDef, u32 battlerAtk)
     u32 unusable = AI_DATA->moveLimitations[battlerDef];
     u16 *moves = GetMovesArray(battlerDef);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && !(unusable & (1u << i))
             && AI_DATA->simulatedDmg[battlerDef][battlerAtk][i].expected >= gBattleMons[battlerAtk].hp
@@ -1178,7 +1179,7 @@ u32 NoOfHitsForTargetToFaintAI(u32 battlerDef, u32 battlerAtk)
     u32 currNumberOfHits;
     u32 leastNumberOfHits = UNKNOWN_NO_OF_HITS;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         currNumberOfHits = GetNoOfHitsToKOBattler(battlerDef, battlerAtk, i);
         if (currNumberOfHits != 0)
@@ -1198,7 +1199,7 @@ u32 GetBestDmgMoveFromBattler(u32 battlerAtk, u32 battlerDef)
     u32 unusable = AI_DATA->moveLimitations[battlerAtk];
     u16 *moves = GetMovesArray(battlerAtk);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && !(unusable & (1u << i))
             && bestDmg < AI_DATA->simulatedDmg[battlerAtk][battlerDef][i].expected)
@@ -1217,7 +1218,7 @@ u32 GetBestDmgFromBattler(u32 battler, u32 battlerTarget)
     u32 unusable = AI_DATA->moveLimitations[battler];
     u16 *moves = GetMovesArray(battler);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE
          && moves[i] != MOVE_UNAVAILABLE
@@ -1239,7 +1240,7 @@ bool32 CanAIFaintTarget(u32 battlerAtk, u32 battlerDef, u32 numHits)
     u32 moveLimitations = AI_DATA->moveLimitations[battlerAtk];
     u16 *moves = gBattleMons[battlerAtk].moves;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && !(moveLimitations & (1u << i)))
         {
@@ -1266,7 +1267,7 @@ bool32 CanAIFaintTarget(u32 battlerAtk, u32 battlerDef, u32 numHits)
 bool32 CanTargetMoveFaintAi(u32 move, u32 battlerDef, u32 battlerAtk, u32 nHits)
 {
     u32 indexSlot = GetMoveSlot(GetMovesArray(battlerDef), move);
-    if (indexSlot < MAX_MON_MOVES)
+    if (indexSlot < MAX_SELECTABLE_MOVES)
     {
         if (GetNoOfHitsToKO(AI_DATA->simulatedDmg[battlerDef][battlerAtk][indexSlot].expected, gBattleMons[battlerAtk].hp) <= nHits)
             return TRUE;
@@ -1286,7 +1287,7 @@ bool32 CanTargetFaintAiWithMod(u32 battlerDef, u32 battlerAtk, s32 hpMod, s32 dm
     if (hpCheck > gBattleMons[battlerAtk].maxHP)
         hpCheck = gBattleMons[battlerAtk].maxHP;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         dmg = AI_DATA->simulatedDmg[battlerAtk][battlerDef][i].expected;
         if (dmgMod)
@@ -1948,8 +1949,9 @@ bool32 CanIndexMoveFaintTarget(u32 battlerAtk, u32 battlerDef, u32 index, u32 nu
 
 u16 *GetMovesArray(u32 battler)
 {
+	
     if (IsAiBattlerAware(battler) || IsAiBattlerAware(BATTLE_PARTNER(battler)))
-        return gBattleMons[battler].moves;
+		return gBattleMons[battler].moves;
     else
         return gBattleResources->battleHistory->usedMoves[battler];
 }
@@ -1959,7 +1961,7 @@ bool32 HasOnlyMovesWithCategory(u32 battlerId, u32 category, bool32 onlyOffensiv
     u32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (onlyOffensive && IS_MOVE_STATUS(moves[i]))
             continue;
@@ -1975,7 +1977,7 @@ bool32 HasMoveWithCategory(u32 battler, u32 category)
     u32 i;
     u16 *moves = GetMovesArray(battler);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && GetBattleMoveCategory(moves[i]) == category)
             return TRUE;
@@ -1988,7 +1990,7 @@ bool32 HasMoveWithType(u32 battler, u32 type)
     s32 i;
     u16 *moves = GetMovesArray(battler);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && gMovesInfo[moves[i]].type == type)
             return TRUE;
@@ -2002,7 +2004,7 @@ bool32 HasMoveEffect(u32 battlerId, u32 effect)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE
             && gMovesInfo[moves[i]].effect == effect)
@@ -2017,7 +2019,7 @@ bool32 HasMoveEffectANDArg(u32 battlerId, u32 effect, u32 argument)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE
             && gMovesInfo[moves[i]].effect == effect
@@ -2033,7 +2035,7 @@ bool32 HasMoveWithAdditionalEffect(u32 battlerId, u32 moveEffect)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE
             && MoveHasAdditionalEffect(moves[i], moveEffect))
@@ -2048,7 +2050,7 @@ bool32 HasMoveWithCriticalHitChance(u32 battlerId)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE
             && gMovesInfo[moves[i]].criticalHitStage > 0)
@@ -2063,7 +2065,7 @@ bool32 HasMoveWithMoveEffectExcept(u32 battlerId, u32 moveEffect, u32 exception)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE
             && gMovesInfo[moves[i]].effect != exception
@@ -2079,7 +2081,7 @@ bool32 HasMove(u32 battlerId, u32 move)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && moves[i] == move)
             return TRUE;
@@ -2093,7 +2095,7 @@ bool32 HasAnyKnownMove(u32 battlerId)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE)
             return TRUE;
@@ -2107,7 +2109,7 @@ bool32 HasMoveThatLowersOwnStats(u32 battlerId)
     s32 i, j;
     u32 aiMove;
     u16 *moves = GetMovesArray(battlerId);
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         aiMove = moves[i];
         if (aiMove != MOVE_NONE && aiMove != MOVE_UNAVAILABLE)
@@ -2128,7 +2130,7 @@ bool32 HasMoveWithLowAccuracy(u32 battlerAtk, u32 battlerDef, u32 accCheck, bool
     u16 *moves = GetMovesArray(battlerAtk);
     u32 moveLimitations = AI_DATA->moveLimitations[battlerAtk];
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] == MOVE_NONE || moves[i] == MOVE_UNAVAILABLE)
             continue;
@@ -2155,7 +2157,7 @@ bool32 HasSleepMoveWithLowAccuracy(u32 battlerAtk, u32 battlerDef)
     u32 i;
     u16 *moves = GetMovesArray(battlerAtk);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] == MOVE_NONE)
             break;
@@ -2179,7 +2181,7 @@ bool32 HasHealingEffect(u32 battlerId)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && IsHealingMove(moves[i]))
             return TRUE;
@@ -2207,7 +2209,7 @@ bool32 HasTrappingMoveEffect(u32 battler)
     s32 i;
     u16 *moves = GetMovesArray(battler);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && IsTrappingMove(moves[i]))
             return TRUE;
@@ -2376,7 +2378,7 @@ bool32 HasDamagingMove(u32 battlerId)
     u32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && gMovesInfo[moves[i]].power != 0)
             return TRUE;
@@ -2390,7 +2392,7 @@ bool32 HasDamagingMoveOfType(u32 battlerId, u32 type)
     s32 i;
     u16 *moves = GetMovesArray(battlerId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE
           && gMovesInfo[moves[i]].type == type && gMovesInfo[moves[i]].power != 0)
@@ -2410,7 +2412,7 @@ bool32 HasHighCritRatioMove(u32 battler)
     s32 i;
     u16 *moves = GetMovesArray(battler);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != MOVE_UNAVAILABLE && gMovesInfo[moves[i]].criticalHitStage > 0)
             return TRUE;
@@ -2656,7 +2658,7 @@ static bool32 PartyBattlerShouldAvoidHazards(u32 currBattler, u32 switchBattler)
     u32 ability = GetMonAbility(mon);   // we know our own party data
     u32 holdEffect;
     u32 species = GetMonData(mon, MON_DATA_SPECIES);
-    u32 flags = gSideStatuses[GetBattlerSide(currBattler)] & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES);
+    u32 flags = gSideStatuses[GetBattlerSide(currBattler)] & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SHOCK_TRAP);
     s32 hazardDamage = 0;
     u32 type1 = gSpeciesInfo[species].types[0];
     u32 type2 = gSpeciesInfo[species].types[1];
@@ -3572,7 +3574,7 @@ bool32 PartyHasMoveCategory(u32 battlerId, u32 category)
         if (GetMonData(&party[i], MON_DATA_HP, NULL) == 0)
             continue;
 
-        for (j = 0; j < MAX_MON_MOVES; j++)
+        for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
         {
             u32 move = GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL);
             u32 pp = GetMonData(&party[i], MON_DATA_PP1 + j, NULL);
@@ -3584,6 +3586,8 @@ bool32 PartyHasMoveCategory(u32 battlerId, u32 category)
                     return TRUE;
             }
         }
+		
+		
     }
 
     return FALSE;

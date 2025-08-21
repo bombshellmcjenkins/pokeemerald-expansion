@@ -146,6 +146,7 @@ struct DisableStruct
     u8 toxicSpikesDone:1;
     u8 stickyWebDone:1;
     u8 stealthRockDone:1;
+	u8 shockTrapDone:1;
     u8 syrupBombTimer;
     u8 syrupBombIsShiny:1;
     u8 steelSurgeDone:1;
@@ -266,6 +267,7 @@ struct SideTimer
     u8 spikesAmount;
     u8 toxicSpikesAmount;
     u8 stealthRockAmount;
+	u8 shockTrapAmount;
     u8 stickyWebAmount;
     u8 stickyWebBattlerId;
     u8 stickyWebBattlerSide; // Used for Court Change
@@ -315,7 +317,7 @@ struct WishFutureKnock
 struct AI_SavedBattleMon
 {
     u16 ability;
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_SELECTABLE_MOVES];
     u16 heldItem;
     u16 species:15;
     u16 saved:1;
@@ -330,7 +332,7 @@ struct AiPartyMon
     u16 ability;
     u16 gender;
     u16 level;
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_SELECTABLE_MOVES];
     u32 status;
     bool8 isFainted;
     bool8 wasSentInBattle;
@@ -366,9 +368,9 @@ struct AiLogicData
     u8 hpPercents[MAX_BATTLERS_COUNT];
     u16 partnerMove;
     u16 speedStats[MAX_BATTLERS_COUNT]; // Speed stats for all battles, calculated only once, same way as damages
-    struct SimulatedDamage simulatedDmg[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, moveIndex
-    u8 effectiveness[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, moveIndex
-    u8 moveAccuracy[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, moveIndex
+    struct SimulatedDamage simulatedDmg[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_SELECTABLE_MOVES]; // attacker, target, moveIndex
+    u8 effectiveness[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_SELECTABLE_MOVES]; // attacker, target, moveIndex
+    u8 moveAccuracy[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_SELECTABLE_MOVES]; // attacker, target, moveIndex
     u8 moveLimitations[MAX_BATTLERS_COUNT];
     u8 monToSwitchInId[MAX_BATTLERS_COUNT]; // ID of the mon to switch in.
     u8 mostSuitableMonId[MAX_BATTLERS_COUNT]; // Stores result of GetMostSuitableMonToSwitchInto, which decides which generic mon the AI would switch into if they decide to switch. This can be overruled by specific mons found in ShouldSwitch; the final resulting mon is stored in AI_monToSwitchIntoId.
@@ -386,7 +388,7 @@ struct AI_ThinkingStruct
     u8 aiState;
     u8 movesetIndex;
     u16 moveConsidered;
-    s32 score[MAX_MON_MOVES];
+    s32 score[MAX_SELECTABLE_MOVES];
     u32 funcResult;
     u32 aiFlags[MAX_BATTLERS_COUNT];
     u8 aiAction;
@@ -400,7 +402,7 @@ struct BattleHistory
 {
     u16 abilities[MAX_BATTLERS_COUNT];
     u8 itemEffects[MAX_BATTLERS_COUNT];
-    u16 usedMoves[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
+    u16 usedMoves[MAX_BATTLERS_COUNT][MAX_SELECTABLE_MOVES];
     u16 moveHistory[MAX_BATTLERS_COUNT][AI_MOVE_HISTORY_COUNT]; // 3 last used moves for each battler
     u8 moveHistoryIndex[MAX_BATTLERS_COUNT];
     u16 trainerItems[MAX_BATTLERS_COUNT];
@@ -760,7 +762,7 @@ struct BattleStruct
     u16 tracedAbility[MAX_BATTLERS_COUNT];
     u16 hpBefore[MAX_BATTLERS_COUNT]; // Hp of battlers before using a move. For Berserk and Anger Shell.
     struct Illusion illusion[MAX_BATTLERS_COUNT];
-    s32 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // AI, target, moves to make debugging easier
+    s32 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_SELECTABLE_MOVES]; // AI, target, moves to make debugging easier
     u8 aiMoveOrAction[MAX_BATTLERS_COUNT];
     u8 aiChosenTarget[MAX_BATTLERS_COUNT];
     u8 soulheartBattlerId;
@@ -829,7 +831,8 @@ struct BattleStruct
     u16 commanderActive[MAX_BATTLERS_COUNT];
     u32 stellarBoostFlags[NUM_BATTLE_SIDES]; // stored as a bitfield of flags for all types for each side
     u8 redCardActivates:1;
-    u8 padding:7;
+	u8 viewingBirthright:1;
+    u8 padding:6;
     u8 usedEjectItem;
     u8 usedMicleBerry;
 };
@@ -837,7 +840,8 @@ struct BattleStruct
 // The palaceFlags member of struct BattleStruct contains 1 flag per move to indicate which moves the AI should consider,
 // and 1 flag per battler to indicate whether the battler is awake and at <= 50% HP (which affects move choice).
 // The assert below is to ensure palaceFlags is large enough to store these flags without overlap.
-STATIC_ASSERT(sizeof(((struct BattleStruct *)0)->palaceFlags) * 8 >= MAX_BATTLERS_COUNT + MAX_MON_MOVES, PalaceFlagsTooSmall)
+//STATIC_ASSERT(sizeof(((struct BattleStruct *)0)->palaceFlags) * 8 >= MAX_BATTLERS_COUNT + MAX_SELECTABLE_MOVES, PalaceFlagsTooSmall)
+STATIC_ASSERT(sizeof(((struct BattleStruct *)0)->palaceFlags) * 10 >= MAX_BATTLERS_COUNT + MAX_SELECTABLE_MOVES, PalaceFlagsTooSmall)
 
 #define DYNAMIC_TYPE_MASK                 ((1 << 6) - 1)
 #define F_DYNAMIC_TYPE_IGNORE_PHYSICALITY  (1 << 6) // If set, the dynamic type's physicality won't be used for certain move effects.

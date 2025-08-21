@@ -36,10 +36,12 @@ enum {
     MON_DATA_MOVE2,
     MON_DATA_MOVE3,
     MON_DATA_MOVE4,
+	MON_DATA_INNATE_MOVE,
     MON_DATA_PP1,
     MON_DATA_PP2,
     MON_DATA_PP3,
     MON_DATA_PP4,
+	MON_DATA_INNATE_PP,
     MON_DATA_PP_BONUSES,
     MON_DATA_COOL,
     MON_DATA_BEAUTY,
@@ -136,24 +138,33 @@ struct PokemonSubstruct0
 
 struct PokemonSubstruct1
 {
-    u16 move1:11; // 2047 moves.
-    u16 evolutionTracker1:5;
-    u16 move2:11; // 2047 moves.
-    u16 evolutionTracker2:5;
-    u16 move3:11; // 2047 moves.
-    u16 unused_04:5;
-    u16 move4:11; // 2047 moves.
-    u16 unused_06:3;
-    u16 hyperTrainedHP:1;
-    u16 hyperTrainedAttack:1;
-    u8 pp1:7; // 127 PP.
-    u8 hyperTrainedDefense:1;
-    u8 pp2:7; // 127 PP.
-    u8 hyperTrainedSpeed:1;
-    u8 pp3:7; // 127 PP.
+//	u16 move0:11; // innate move slot - doesn't need to be saved with pokemon because it's dependent on species?
+    u16 move1:10; // 1023 moves.
+    u16 pp1:6; // 63 PP.
+	
+    u16 move2:10; // 1023 moves.
+    u16 pp2:6; // 63 PP.
+	
+    u16 move3:10; // 1023 moves.
+    u16 pp3:6; // 63 PP.
+//    u16 unused_04:5;
+
+    u16 move4:10; // 1023 moves.
+    u16 pp4:6; // 63 PP.
+//    u16 unused_06:3;
+
+	u8 ppInnate:6; // innate move pp	
     u8 hyperTrainedSpAttack:1;
-    u8 pp4:7; // 127 PP.
+    u8 hyperTrainedDefense:1;
+
+    u8 evolutionTracker1:5;	
+    u8 hyperTrainedAttack:1;
     u8 hyperTrainedSpDefense:1;
+    u8 hyperTrainedSpeed:1;
+	
+    u8 evolutionTracker2:5;
+    u8 hyperTrainedHP:1;
+	u8 unused_04:2;
 };
 
 struct PokemonSubstruct2
@@ -313,7 +324,7 @@ struct BattlePokemon
     /*0x06*/ u16 speed;
     /*0x08*/ u16 spAttack;
     /*0x0A*/ u16 spDefense;
-    /*0x0C*/ u16 moves[MAX_MON_MOVES];
+    /*0x0C*/ u16 moves[MAX_SELECTABLE_MOVES];
     /*0x14*/ u32 hpIV:5;
     /*0x14*/ u32 attackIV:5;
     /*0x15*/ u32 defenseIV:5;
@@ -324,7 +335,8 @@ struct BattlePokemon
     /*0x18*/ s8 statStages[NUM_BATTLE_STATS];
     /*0x20*/ u16 ability;
     /*0x22*/ u8 types[3];
-    /*0x25*/ u8 pp[MAX_MON_MOVES];
+    /*0x25*/ u8 pp[MAX_SELECTABLE_MOVES]; 
+//			 u8 ppInnate;
     /*0x29*/ u16 hp;
     /*0x2B*/ u8 level;
     /*0x2C*/ u8 friendship;
@@ -463,6 +475,7 @@ struct SpeciesInfo /*0xC4*/
     const struct Evolution *evolutions;
     const u16 *formSpeciesIdTable;
     const struct FormChange *formChangeTable;
+	u16 innateMove;
 #if OW_POKEMON_OBJECT_EVENTS
     struct ObjectEventGraphicsInfo overworldData;
 #if P_GENDER_DIFFERENCES

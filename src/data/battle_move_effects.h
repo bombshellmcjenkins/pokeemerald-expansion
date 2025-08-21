@@ -373,6 +373,13 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
         .encourageEncore = TRUE,
     },
 
+	[EFFECT_COMPOUND_POISON] =
+	{
+		.battleScript = BattleScript_EffectCompoundPoison,
+		.battleTvScore = 4,
+		.encourageEncore = TRUE,
+	},
+
     [EFFECT_PARALYZE] =
     {
         .battleScript = BattleScript_EffectParalyze,
@@ -797,6 +804,14 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
         .semiInvulnerableEffect = TRUE,
     },
 
+	[EFFECT_DIG_TRIO] =
+	{
+		.battleScript = BattleScript_EffectTwoTurnsAttack,
+        .battleTvScore = 3,
+        .twoTurnEffect = TRUE,
+        .semiInvulnerableEffect = TRUE,
+	},
+
     [EFFECT_DEFENSE_CURL] =
     {
         .battleScript = BattleScript_EffectDefenseCurl,
@@ -922,6 +937,13 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
         .battleTvScore = 4,
         .encourageEncore = TRUE,
     },
+
+	[EFFECT_FURNACE] =
+	{
+		.battleScript = BattleScript_EffectFurnace,
+		.battleTvScore = 4,
+		.encourageEncore = TRUE,
+	},
 
     [EFFECT_TAUNT] =
     {
@@ -1325,6 +1347,13 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
         .battleTvScore = 0, // TODO: Assign points
         .encourageEncore = TRUE,
     },
+	
+	[EFFECT_SHOCK_TRAP] =
+	{
+		.battleScript = BattleScript_EffectShockTrap,
+		.battleTvScore = 0,
+		.encourageEncore = TRUE,
+	},
 
     [EFFECT_TELEKINESIS] =
     {
@@ -1523,6 +1552,13 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
         .battleTvScore = 0, // TODO: Assign points
         .encourageEncore = TRUE,
     },
+	
+	[EFFECT_DISSOLVE] =
+    {
+        .battleScript = BattleScript_EffectDissolve,
+        .battleTvScore = 0, // TODO: Assign points
+        .encourageEncore = TRUE,
+    },	
 
     [EFFECT_LAST_RESORT] =
     {
@@ -1873,6 +1909,13 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
         .battleTvScore = 0, // TODO: Assign points
         .encourageEncore = TRUE,
     },
+
+	[EFFECT_FRUIT_SNACK] =
+	{
+		.battleScript = BattleScript_EffectFruitSnack,
+		.battleTvScore = 0,
+		.encourageEncore = TRUE,
+	},
 
     [EFFECT_GRAV_APPLE] =
     {
@@ -2261,4 +2304,22 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
         .battleScript = BattleScript_EffectHit,
         .battleTvScore = 0, // TODO: Assign points
     },
+	
+	[EFFECT_MOOD_SWING] =
+	{
+		.battleScript = BattleScript_EffectMoodSwing,
+		.battleTvScore = 0, // TODO: Destroy battle tv
+	},
+
+	[EFFECT_MEMORY_WIPE] =
+	{
+		.battleScript = BattleScript_EffectMemoryWipe,
+		.battleTvScore = 0,
+	},
+	
+	[EFFECT_FORCE_OF_WILL] =
+	{
+		.battleScript = BattleScript_EffectForceOfWill,
+		.battleTvScore = 0,
+	},
 };

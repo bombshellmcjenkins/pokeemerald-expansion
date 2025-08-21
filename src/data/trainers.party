@@ -6299,6 +6299,81 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Ice Beam
 - Toxic
 
+=== TRAINER_BRENDAN_CHAMPION_TORCHIC ===
+Name: BRENDAN
+Class: Champion
+Pic: Brendan
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Smart Trainer
+
+Swampert @ Leftovers
+Level: 57
+Ability: Torrent
+EVs: 252 HP / 4 Atk / 252 SpD
+Impish Nature
+- Stealth Rock
+- Earthquake
+- Flip Turn
+- Knock Off
+
+Magcargo @ Focus Sash
+Ability: Weak Armor
+Modest Nature
+Level: 56
+EVs: 128 SpA / 128 SpD / 252 Spe
+Ball: Timer Ball
+- Lava Plume
+- Recover
+- Power Gem
+- Pain Split
+
+Roserade @ Heavy-Duty Boots
+Ability: Natural Cure
+Level: 56
+EVs: 252 HP / 120 Def / 136 Spe
+Ball: Nest Ball
+Bold Nature
+- Spikes
+- Giga Drain
+- Sludge Bomb
+- Synthesis
+
+Dusknoir @ Choice Band
+Adamant Nature
+Level: 56
+Ability: Pressure
+EVs: 252 HP / 56 Atk / 100 Def / 100 SpD
+Ball: Dusk Ball
+- Shadow Sneak
+- Trick
+- Brick Break
+- Thunder Punch
+
+Sneasler @ Air Balloon
+Level: 56
+Ability: Unburden
+EVs: 252 Atk / 4 SpD / 252 Spe
+Adamant Nature
+Ball: Quick Ball
+- Swords Dance
+- Close Combat
+- Throat Chop
+- Acrobatics
+
+Latios @ Soul Dew
+Level: 58
+Ability: Levitate
+EVs: 4 Def / 252 SpA / 252 Spe
+Ball: Master Ball
+Timid Nature
+- Draco Meteor
+- Luster Purge
+- Flip Turn
+- Recover
+
 === TRAINER_ANDREW ===
 Name: ANDREW
 Class: Fisherman

@@ -1,0 +1,254 @@
+{
+  "Startup": {
+    "Version": "24.11.11",
+    "ForceHaXOnLaunch": false,
+    "TryDetectRecentSave": true,
+    "AutoLoadSaveOnStartup": 1,
+    "ShowChangelogOnUpdate": true,
+    "PluginLoadMethod": 1,
+    "RecentlyLoaded": [
+      "C:\\Users\\bombs\\OneDrive\\Documents\\GitHub\\pokeemerald-expansion\\pokeemerald.sav",
+      ""
+    ],
+    "RecentlyLoadedMaxCount": 10,
+    "Language": "en",
+    "DefaultSaveVersion": 50
+  },
+  "Backup": {
+    "BAKEnabled": true,
+    "BAKPrompt": true,
+    "OtherBackupPaths": [],
+    "OtherSaveFileExtensions": []
+  },
+  "Legality": {
+    "Bulk": {
+      "CheckActiveHandler": true
+    },
+    "FramePattern": {
+      "RNGFrameNotFound3": 0,
+      "RNGFrameNotFound4": -1
+    },
+    "Game": {
+      "Gen7": {
+        "Gen7TransferStarPID": 0
+      },
+      "Gen8": {
+        "Gen8MemoryMissingHT": 0
+      }
+    },
+    "Handler": {
+      "CurrentHandlerMismatch": -1,
+      "CheckActiveHandler": true,
+      "Restrictions": {
+        "AllowHandleOTGen6": false,
+        "AllowHandleOTGen7": false,
+        "AllowHandleOTGen7b": false,
+        "AllowHandleOTGen8": false,
+        "AllowHandleOTGen8a": false,
+        "AllowHandleOTGen8b": false,
+        "AllowHandleOTGen9": false
+      }
+    },
+    "HOMETransfer": {
+      "HOMETransferTrackerNotPresent": -1,
+      "ZeroHeightWeight": 0
+    },
+    "Nickname": {
+      "NicknamedAnotherSpecies": 0,
+      "Nickname12": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname3": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname4": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname5": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname6": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname7": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname7b": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname8": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname8a": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname8b": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      },
+      "Nickname9": {
+        "NicknamedTrade": -1,
+        "NicknamedMysteryGift": -1
+      }
+    },
+    "Tradeback": {
+      "AllowGen1Tradeback": true
+    },
+    "WordFilter": {
+      "CheckWordFilter": true,
+      "DisableWordFilterPastGen": false
+    }
+  },
+  "Converter": {
+    "AllowIncompatibleConversion": 0,
+    "AllowGuessRejuvenateHOME": 1,
+    "VirtualConsoleSourceGen1": 35,
+    "VirtualConsoleSourceGen2": 40,
+    "RetainMetDateTransfer45": false
+  },
+  "Import": {
+    "ApplyNature": true,
+    "ApplyMarkings": true
+  },
+  "SlotWrite": {
+    "SetUpdateDex": true,
+    "SetUpdatePKM": true,
+    "SetUpdateRecords": true,
+    "ModifyUnset": true
+  },
+  "Privacy": {
+    "HideSAVDetails": false,
+    "HideSecretDetails": false
+  },
+  "SaveLanguage": {
+    "OverrideGen1": {
+      "Language": 2,
+      "Version": 0
+    },
+    "OverrideGen2": {
+      "Language": 2,
+      "Version": 0
+    },
+    "OverrideGen3RS": {
+      "Language": 2,
+      "Version": 0
+    },
+    "OverrideGen3FRLG": {
+      "Language": 2,
+      "Version": 0
+    }
+  },
+  "Display": {
+    "Unicode": true,
+    "IgnoreLegalPopup": false,
+    "ExportLegalityVerboseProperties": false,
+    "FlagIllegal": true,
+    "FocusBorderDeflate": 1,
+    "DisableScalingDpi": false
+  },
+  "Sprite": {
+    "SpritePreference": 0,
+    "ShinySprites": true,
+    "ShowEggSpriteAsHeldItem": true,
+    "ShowEncounterBall": true,
+    "ShowEncounterColor": 2,
+    "ShowEncounterColorPKM": 0,
+    "ShowEncounterOpacityBackground": 63,
+    "ShowEncounterOpacityStripe": 95,
+    "ShowEncounterThicknessStripe": 4,
+    "ShowExperiencePercent": false,
+    "ShowTeraType": 1,
+    "ShowTeraThicknessStripe": 4,
+    "ShowTeraOpacityBackground": 255,
+    "ShowTeraOpacityStripe": 175
+  },
+  "Sounds": {
+    "PlaySoundSAVLoad": true,
+    "PlaySoundLegalityCheck": true
+  },
+  "Hover": {
+    "HoverSlotShowPreview": true,
+    "HoverSlotShowEncounter": true,
+    "HoverSlotShowEncounterVerbose": false,
+    "HoverSlotShowText": true,
+    "HoverSlotPlayCry": true,
+    "HoverSlotGlowEdges": true,
+    "PreviewShowPaste": true,
+    "PreviewCursorShift": {
+      "IsEmpty": false,
+      "X": 16,
+      "Y": 8
+    }
+  },
+  "Draw": {
+    "GlowInitial": "#ffffff",
+    "GlowFinal": "#87cefa",
+    "VerticalSelectPrimary": "#ffffff",
+    "VerticalSelectSecondary": "#d3d3d3",
+    "InvalidSelection": "#e9967a",
+    "MarkDefault": "#000000",
+    "MarkBlue": "#00bfff",
+    "MarkPink": "#ff75b3",
+    "Male": "#0000ff",
+    "Female": "#ff0000",
+    "ShinyUnicode": "\u2606",
+    "ShinyDefault": "*",
+    "BackLegal": "#c8ffc8",
+    "TextColor": "#000000",
+    "BackColor": "#ffffff",
+    "BackHighlighted": "#0078d7",
+    "TextHighlighted": "#ffffff"
+  },
+  "Advanced": {
+    "PathBlockKeyList": "",
+    "HideEventTypeBelow": 0,
+    "HideEvent8Contains": ""
+  },
+  "EntityEditor": {
+    "HiddenPowerOnChangeMaxPower": true,
+    "ShowLegalBallsFirst": true,
+    "ShowGenderGen1": false,
+    "ShowStatusCondition": true
+  },
+  "EntityDb": {
+    "SearchBackups": true,
+    "SearchExtraSaves": true,
+    "SearchExtraSavesDeep": true,
+    "InitialSortMode": 0,
+    "FilterUnavailableSpecies": true
+  },
+  "EncounterDb": {
+    "ReturnNoneIfEmptySearch": true,
+    "FilterUnavailableSpecies": true,
+    "UseTabsAsCriteria": true,
+    "UseTabsAsCriteriaAnySpecies": true
+  },
+  "MysteryDb": {
+    "FilterUnavailableSpecies": true
+  },
+  "Report": {
+    "ExtraProperties": [],
+    "HiddenProperties": []
+  },
+  "SlotExport": {
+    "BoxExport": {
+      "Scope": 0,
+      "FolderCreation": 0,
+      "FolderPrefix": 0,
+      "EmptySlots": 0,
+      "FileIndexPrefix": 0,
+      "Notify": 0
+    },
+    "DefaultBoxExportNamer": "",
+    "AllowBoxDataDrop": false
+  }
+}

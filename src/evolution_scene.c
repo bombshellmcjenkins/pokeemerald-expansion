@@ -765,6 +765,11 @@ static void Task_EvolutionScene(u8 taskId)
         if (IsCryFinished())
         {
             u32 zero = 0;
+			s32 i;
+			
+			u16 newInnateMove = gSpeciesInfo[gTasks[taskId].tPostEvoSpecies].innateMove;
+			u8 newInnatePP = gMovesInfo[newInnateMove].pp;
+			
             StringExpandPlaceholders(gStringVar4, gText_CongratsPkmnEvolved);
             BattlePutTextOnWindow(gStringVar4, B_WIN_MSG);
             PlayBGM(MUS_EVOLVED);
@@ -776,6 +781,21 @@ static void Task_EvolutionScene(u8 taskId)
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_SEEN);
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_CAUGHT);
             IncrementGameStat(GAME_STAT_EVOLVED_POKEMON);
+			
+			// Cap PP of innate move to max PP of new innate move
+			if (GetMonData(mon, MON_DATA_INNATE_PP) > newInnatePP)
+				SetMonData(mon, MON_DATA_INNATE_PP, &newInnatePP);
+			
+			// If mon already knows their new innate move, forget it
+			for (i = 0; i < MAX_LEARNED_MOVES; i++)
+			{
+				if (GetMonData(mon, MON_DATA_MOVE1 + i) == newInnateMove)
+				{
+					RemoveMonPPBonus(mon, i);
+					SetMonMoveSlot(mon, MOVE_NONE, i);
+				}
+			}
+				
         }
         break;
     case EVOSTATE_TRY_LEARN_MOVE:
@@ -974,7 +994,7 @@ static void Task_EvolutionScene(u8 taskId)
             if (!gPaletteFade.active && gMain.callback2 == CB2_EvolutionSceneUpdate)
             {
                 var = GetMoveSlotToReplace();
-                if (var == MAX_MON_MOVES)
+                if (var == MAX_LEARNED_MOVES)
                 {
                     // Didn't select move slot
                     gTasks[taskId].tLearnMoveState = MVSTATE_ASK_CANCEL;
@@ -1358,7 +1378,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
             if (!gPaletteFade.active && gMain.callback2 == CB2_TradeEvolutionSceneUpdate)
             {
                 var = GetMoveSlotToReplace();
-                if (var == MAX_MON_MOVES)
+                if (var == MAX_LEARNED_MOVES)
                 {
                     // Didn't select move slot
                     gTasks[taskId].tLearnMoveState = T_MVSTATE_ASK_CANCEL;

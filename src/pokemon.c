@@ -11,6 +11,7 @@
 #include "battle_setup.h"
 #include "battle_tower.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "data.h"
 #include "event_data.h"
 #include "event_object_movement.h"
@@ -719,9 +720,9 @@ const struct NatureInfo gNaturesInfo[NUM_NATURES] =
 // gPPUpGetMask - A mask to get the number of PP Ups applied to that move slot
 // gPPUpClearMask - A mask to clear the number of PP Ups applied to that move slot
 // gPPUpAddValues - A value to add to the PP Bonuses byte to apply 1 PP Up to that move slot
-const u8 gPPUpGetMask[MAX_MON_MOVES]   = {PP_UP_SHIFTS(3)};
-const u8 gPPUpClearMask[MAX_MON_MOVES] = {PP_UP_SHIFTS_INV(3)};
-const u8 gPPUpAddValues[MAX_MON_MOVES] = {PP_UP_SHIFTS(1)};
+const u8 gPPUpGetMask[MAX_SELECTABLE_MOVES]   = {PP_UP_SHIFTS(3)};
+const u8 gPPUpClearMask[MAX_SELECTABLE_MOVES] = {PP_UP_SHIFTS_INV(3)};
+const u8 gPPUpAddValues[MAX_SELECTABLE_MOVES] = {PP_UP_SHIFTS(1)};
 
 const u8 gStatStageRatios[MAX_STAT_STAGE + 1][2] =
 {
@@ -1396,7 +1397,7 @@ void CreateBattleTowerMon(struct Pokemon *mon, struct BattleTowerPokemon *src)
 
     CreateMon(mon, src->species, src->level, 0, TRUE, src->personality, OT_ID_PRESET, src->otId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
         SetMonMoveSlot(mon, src->moves[i], i);
 
     SetMonData(mon, MON_DATA_PP_BONUSES, &src->ppBonuses);
@@ -1458,7 +1459,7 @@ void CreateBattleTowerMon_HandleLevel(struct Pokemon *mon, struct BattleTowerPok
 
     CreateMon(mon, src->species, level, 0, TRUE, src->personality, OT_ID_PRESET, src->otId);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
         SetMonMoveSlot(mon, src->moves[i], i);
 
     SetMonData(mon, MON_DATA_PP_BONUSES, &src->ppBonuses);
@@ -1522,7 +1523,7 @@ void CreateApprenticeMon(struct Pokemon *mon, const struct Apprentice *src, u8 m
               otId);
 
     SetMonData(mon, MON_DATA_HELD_ITEM, &src->party[monId].item);
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
         SetMonMoveSlot(mon, src->party[monId].moves[i], i);
 
     evAmount = MAX_TOTAL_EVS / NUM_STATS;
@@ -1582,7 +1583,7 @@ void ConvertPokemonToBattleTowerPokemon(struct Pokemon *mon, struct BattleTowerP
 
     dest->heldItem = heldItem;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
         dest->moves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, NULL);
 
     dest->level = GetMonData(mon, MON_DATA_LEVEL, NULL);
@@ -1863,7 +1864,7 @@ u16 GiveMoveToMon(struct Pokemon *mon, u16 move)
 u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move)
 {
     s32 i;
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         u16 existingMove = GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, NULL);
         if (existingMove == MOVE_NONE)
@@ -1882,7 +1883,7 @@ u16 GiveMoveToBattleMon(struct BattlePokemon *mon, u16 move)
 {
     s32 i;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         if (mon->moves[i] == MOVE_NONE)
         {
@@ -1928,7 +1929,7 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //Credit: AsparagusEdua
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromBoxMonExp(boxMon);
     s32 i;
-    u16 moves[MAX_MON_MOVES] = {MOVE_NONE};
+    u16 moves[MAX_LEARNED_MOVES] = {MOVE_NONE};
     u8 addedMoves = 0;
     const struct LevelUpMove *learnset = GetSpeciesLevelUpLearnset(species);
 
@@ -1953,24 +1954,27 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //Credit: AsparagusEdua
 
         if (!alreadyKnown)
         {
-            if (addedMoves < MAX_MON_MOVES)
+            if (addedMoves < MAX_LEARNED_MOVES)
             {
                 moves[addedMoves] = learnset[i].move;
                 addedMoves++;
             }
             else
             {
-                for (j = 0; j < MAX_MON_MOVES - 1; j++)
+                for (j = 0; j < MAX_LEARNED_MOVES - 1; j++)
                     moves[j] = moves[j + 1];
-                moves[MAX_MON_MOVES - 1] = learnset[i].move;
+                moves[MAX_LEARNED_MOVES - 1] = learnset[i].move;
             }
         }
     }
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         SetBoxMonData(boxMon, MON_DATA_MOVE1 + i, &moves[i]);
         SetBoxMonData(boxMon, MON_DATA_PP1 + i, &gMovesInfo[moves[i]].pp);
     }
+	
+	SetBoxMonData(boxMon, MON_DATA_INNATE_MOVE, &gSpeciesInfo[species].innateMove);
+	SetBoxMonData(boxMon, MON_DATA_INNATE_PP, &gMovesInfo[gSpeciesInfo[species].innateMove].pp);
 }
 
 u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
@@ -2009,11 +2013,11 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
 void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
 {
     s32 i;
-    u16 moves[MAX_MON_MOVES];
-    u8 pp[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
+    u8 pp[MAX_LEARNED_MOVES];
     u8 ppBonuses;
 
-    for (i = 0; i < MAX_MON_MOVES - 1; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES - 1; i++)
     {
         moves[i] = GetMonData(mon, MON_DATA_MOVE2 + i, NULL);
         pp[i] = GetMonData(mon, MON_DATA_PP2 + i, NULL);
@@ -2021,10 +2025,10 @@ void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
 
     ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES, NULL);
     ppBonuses >>= 2;
-    moves[MAX_MON_MOVES - 1] = move;
-    pp[MAX_MON_MOVES - 1] = gMovesInfo[move].pp;
+    moves[MAX_LEARNED_MOVES - 1] = move;
+    pp[MAX_LEARNED_MOVES - 1] = gMovesInfo[move].pp;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         SetMonData(mon, MON_DATA_MOVE1 + i, &moves[i]);
         SetMonData(mon, MON_DATA_PP1 + i, &pp[i]);
@@ -2036,11 +2040,11 @@ void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
 void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move)
 {
     s32 i;
-    u16 moves[MAX_MON_MOVES];
-    u8 pp[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
+    u8 pp[MAX_LEARNED_MOVES];
     u8 ppBonuses;
 
-    for (i = 0; i < MAX_MON_MOVES - 1; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES - 1; i++)
     {
         moves[i] = GetBoxMonData(boxMon, MON_DATA_MOVE2 + i, NULL);
         pp[i] = GetBoxMonData(boxMon, MON_DATA_PP2 + i, NULL);
@@ -2048,10 +2052,10 @@ void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move)
 
     ppBonuses = GetBoxMonData(boxMon, MON_DATA_PP_BONUSES, NULL);
     ppBonuses >>= 2;
-    moves[MAX_MON_MOVES - 1] = move;
-    pp[MAX_MON_MOVES - 1] = gMovesInfo[move].pp;
+    moves[MAX_LEARNED_MOVES - 1] = move;
+    pp[MAX_LEARNED_MOVES - 1] = gMovesInfo[move].pp;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         SetBoxMonData(boxMon, MON_DATA_MOVE1 + i, &moves[i]);
         SetBoxMonData(boxMon, MON_DATA_PP1 + i, &pp[i]);
@@ -2403,7 +2407,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         substruct3 = &(GetSubstruct(boxMon, boxMon->personality, 3)->type3);
 
         DecryptBoxMon(boxMon);
-
+		
+		u16 species = substruct0->species;
+		
         if (CalculateBoxMonChecksum(boxMon) != boxMon->checksum)
         {
             boxMon->isBadEgg = TRUE;
@@ -2511,6 +2517,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_MOVE4:
             retVal = substruct1->move4;
             break;
+		case MON_DATA_INNATE_MOVE:
+			retVal = gSpeciesInfo[species].innateMove;
+			break;
         case MON_DATA_PP1:
             retVal = substruct1->pp1;
             break;
@@ -2523,6 +2532,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_PP4:
             retVal = substruct1->pp4;
             break;
+		case MON_DATA_INNATE_PP:
+			retVal = substruct1->ppInnate;
+			break;
         case MON_DATA_HP_EV:
             retVal = substruct2->hpEV;
             break;
@@ -3018,6 +3030,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_PP4:
             SET8(substruct1->pp4);
             break;
+		case MON_DATA_INNATE_PP:
+			SET8(substruct1->ppInnate);
+			break;
         case MON_DATA_HP_EV:
             SET8(substruct2->hpEV);
             break;
@@ -3500,10 +3515,10 @@ void CreateSecretBaseEnemyParty(struct SecretBase *secretBaseRecord)
             for (j = 0; j < NUM_STATS; j++)
                 SetMonData(&gEnemyParty[i], MON_DATA_HP_EV + j, &gBattleResources->secretBase->party.EVs[i]);
 
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_LEARNED_MOVES; j++)
             {
-                SetMonData(&gEnemyParty[i], MON_DATA_MOVE1 + j, &gBattleResources->secretBase->party.moves[i * MAX_MON_MOVES + j]);
-                SetMonData(&gEnemyParty[i], MON_DATA_PP1 + j, &gMovesInfo[gBattleResources->secretBase->party.moves[i * MAX_MON_MOVES + j]].pp);
+                SetMonData(&gEnemyParty[i], MON_DATA_MOVE1 + j, &gBattleResources->secretBase->party.moves[i * MAX_LEARNED_MOVES + j]);
+                SetMonData(&gEnemyParty[i], MON_DATA_PP1 + j, &gMovesInfo[gBattleResources->secretBase->party.moves[i * MAX_LEARNED_MOVES + j]].pp);
             }
         }
     }
@@ -3649,12 +3664,13 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
     s32 i;
     u8 nickname[POKEMON_NAME_BUFFER_SIZE];
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         dst->moves[i] = GetMonData(src, MON_DATA_MOVE1 + i, NULL);
         dst->pp[i] = GetMonData(src, MON_DATA_PP1 + i, NULL);
     }
-
+	
+//	dst->ppInnate = GetMonData(src, MON_DATA_INNATE_PP, NULL);
     dst->species = GetMonData(src, MON_DATA_SPECIES, NULL);
     dst->item = GetMonData(src, MON_DATA_HELD_ITEM, NULL);
     dst->ppBonuses = GetMonData(src, MON_DATA_PP_BONUSES, NULL);
@@ -3862,18 +3878,21 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             if (effectFlags & ITEM4_PP_UP)
             {
                 effectFlags &= ~ITEM4_PP_UP;
-                dataUnsigned = (GetMonData(mon, MON_DATA_PP_BONUSES, NULL) & gPPUpGetMask[moveIndex]) >> (moveIndex * 2);
-                temp1 = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + moveIndex, NULL), GetMonData(mon, MON_DATA_PP_BONUSES, NULL), moveIndex);
-                if (dataUnsigned <= 2 && temp1 > 4)
-                {
-                    dataUnsigned = GetMonData(mon, MON_DATA_PP_BONUSES, NULL) + gPPUpAddValues[moveIndex];
-                    SetMonData(mon, MON_DATA_PP_BONUSES, &dataUnsigned);
+				if (moveIndex < MAX_LEARNED_MOVES)
+				{
+					dataUnsigned = (GetMonData(mon, MON_DATA_PP_BONUSES, NULL) & gPPUpGetMask[moveIndex]) >> (moveIndex * 2);
+					temp1 = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + moveIndex, NULL), GetMonData(mon, MON_DATA_PP_BONUSES, NULL), moveIndex);
+					if (dataUnsigned <= 2 && temp1 > 4)
+					{
+						dataUnsigned = GetMonData(mon, MON_DATA_PP_BONUSES, NULL) + gPPUpAddValues[moveIndex];
+						SetMonData(mon, MON_DATA_PP_BONUSES, &dataUnsigned);
 
-                    dataUnsigned = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + moveIndex, NULL), dataUnsigned, moveIndex) - temp1;
-                    dataUnsigned = GetMonData(mon, MON_DATA_PP1 + moveIndex, NULL) + dataUnsigned;
-                    SetMonData(mon, MON_DATA_PP1 + moveIndex, &dataUnsigned);
-                    retVal = FALSE;
-                }
+						dataUnsigned = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + moveIndex, NULL), dataUnsigned, moveIndex) - temp1;
+						dataUnsigned = GetMonData(mon, MON_DATA_PP1 + moveIndex, NULL) + dataUnsigned;
+						SetMonData(mon, MON_DATA_PP1 + moveIndex, &dataUnsigned);
+						retVal = FALSE;
+					}
+				}
             }
             temp1 = 0;
 
@@ -3998,7 +4017,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                         if (!(effectFlags & (ITEM4_HEAL_PP_ONE >> 3)))
                         {
                             // Heal PP for all moves
-                            for (temp2 = 0; (signed)(temp2) < (signed)(MAX_MON_MOVES); temp2++)
+                            for (temp2 = 0; (signed)(temp2) < (signed)(MAX_SELECTABLE_MOVES); temp2++)
                             {
                                 u16 moveId;
                                 dataUnsigned = GetMonData(mon, MON_DATA_PP1 + temp2, NULL);
@@ -4140,22 +4159,26 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                         break;
 
                     case 4: // ITEM5_PP_MAX
-                        dataUnsigned = (GetMonData(mon, MON_DATA_PP_BONUSES, NULL) & gPPUpGetMask[moveIndex]) >> (moveIndex * 2);
-                        temp2 = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + moveIndex, NULL), GetMonData(mon, MON_DATA_PP_BONUSES, NULL), moveIndex);
-
-                        // Check if 3 PP Ups have been applied already, and that the move has a total PP of at least 5 (excludes Sketch)
-                        if (dataUnsigned < 3 && temp2 >= 5)
+					
+						if (moveIndex < MAX_LEARNED_MOVES)
                         {
-                            dataUnsigned = GetMonData(mon, MON_DATA_PP_BONUSES, NULL);
-                            dataUnsigned &= gPPUpClearMask[moveIndex];
-                            dataUnsigned += gPPUpAddValues[moveIndex] * 3; // Apply 3 PP Ups (max)
+							dataUnsigned = (GetMonData(mon, MON_DATA_PP_BONUSES, NULL) & gPPUpGetMask[moveIndex]) >> (moveIndex * 2);
+							temp2 = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + moveIndex, NULL), GetMonData(mon, MON_DATA_PP_BONUSES, NULL), moveIndex);
 
-                            SetMonData(mon, MON_DATA_PP_BONUSES, &dataUnsigned);
-                            dataUnsigned = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + moveIndex, NULL), dataUnsigned, moveIndex) - temp2;
-                            dataUnsigned = GetMonData(mon, MON_DATA_PP1 + moveIndex, NULL) + dataUnsigned;
-                            SetMonData(mon, MON_DATA_PP1 + moveIndex, &dataUnsigned);
-                            retVal = FALSE;
-                        }
+							// Check if 3 PP Ups have been applied already, and that the move has a total PP of at least 5 (excludes Sketch)
+							if (dataUnsigned < 3 && temp2 >= 5)
+							{
+								dataUnsigned = GetMonData(mon, MON_DATA_PP_BONUSES, NULL);
+								dataUnsigned &= gPPUpClearMask[moveIndex];
+								dataUnsigned += gPPUpAddValues[moveIndex] * 3; // Apply 3 PP Ups (max)
+
+								SetMonData(mon, MON_DATA_PP_BONUSES, &dataUnsigned);
+								dataUnsigned = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + moveIndex, NULL), dataUnsigned, moveIndex) - temp2;
+								dataUnsigned = GetMonData(mon, MON_DATA_PP1 + moveIndex, NULL) + dataUnsigned;
+								SetMonData(mon, MON_DATA_PP1 + moveIndex, &dataUnsigned);
+								retVal = FALSE;
+							}
+						}
                         break;
 
                     case 5: // ITEM5_FRIENDSHIP_LOW
@@ -4592,7 +4615,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, enum EvolutionMode mode, u16 
             case EVO_FRIENDSHIP_MOVE_TYPE:
                 if (friendship >= FRIENDSHIP_EVO_THRESHOLD)
                 {
-                    for (j = 0; j < MAX_MON_MOVES; j++)
+                    for (j = 0; j < MAX_LEARNED_MOVES; j++)
                     {
                         if (gMovesInfo[GetMonData(mon, MON_DATA_MOVE1 + j, NULL)].type == evolutions[i].param)
                         {
@@ -5584,14 +5607,14 @@ u8 CanLearnTeachableMove(u16 species, u16 move)
 
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
 {
-    u16 learnedMoves[4];
+    u16 learnedMoves[5];
     u8 numMoves = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
     const struct LevelUpMove *learnset = GetSpeciesLevelUpLearnset(species);
     int i, j, k;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
     for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
@@ -5605,10 +5628,10 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
 
         if (moveLevel <= level)
         {
-            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != learnset[i].move; j++)
+            for (j = 0; j < MAX_SELECTABLE_MOVES && learnedMoves[j] != learnset[i].move; j++)
                 ;
 
-            if (j == MAX_MON_MOVES)
+            if (j == MAX_SELECTABLE_MOVES)
             {
                 for (k = 0; k < numMoves && moves[k] != learnset[i].move; k++)
                     ;
@@ -5636,7 +5659,7 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
 
 u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 {
-    u16 learnedMoves[MAX_MON_MOVES];
+    u16 learnedMoves[MAX_SELECTABLE_MOVES];
     u16 moves[MAX_LEVEL_UP_MOVES];
     u8 numMoves = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG, 0);
@@ -5647,7 +5670,7 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
     if (species == SPECIES_EGG)
         return 0;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
     for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
@@ -5661,10 +5684,10 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 
         if (moveLevel <= level)
         {
-            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != learnset[i].move; j++)
+            for (j = 0; j < MAX_SELECTABLE_MOVES && learnedMoves[j] != learnset[i].move; j++)
                 ;
 
-            if (j == MAX_MON_MOVES)
+            if (j == MAX_SELECTABLE_MOVES)
             {
                 for (k = 0; k < numMoves && moves[k] != learnset[i].move; k++)
                     ;
@@ -5926,8 +5949,13 @@ void MonRestorePP(struct Pokemon *mon)
 void BoxMonRestorePP(struct BoxPokemon *boxMon)
 {
     int i;
+	u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES,0);
+	u16 innateMove = gSpeciesInfo[species].innateMove;
+	u8 pp = gMovesInfo[innateMove].pp;
+	
+	SetBoxMonData(boxMon, MON_DATA_INNATE_PP, &pp);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         if (GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, 0))
         {
@@ -6776,7 +6804,7 @@ void TryToSetBattleFormChangeMoves(struct Pokemon *mon, u16 method)
             u16 originalMove = formChanges[i].param2;
             u16 newMove = formChanges[i].param3;
 
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_LEARNED_MOVES; j++)
             {
                 u16 currMove = GetMonData(mon, MON_DATA_MOVE1 + j, NULL);
                 if (currMove == originalMove)

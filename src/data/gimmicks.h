@@ -50,5 +50,13 @@ const struct GimmickInfo gGimmicksInfo[GIMMICKS_COUNT] =
         .indicatorPal = &sSpritePalette_TeraIndicator,
         .CanActivate = CanTerastallize,
         .ActivateGimmick = ActivateTera,
-    }
+    },
+	[GIMMICK_BIRTHRIGHT] =
+	{
+		.triggerSheet = &sSpriteSheet_BirthrightTrigger,
+		.triggerPal = &sSpritePalette_BirthrightTrigger,
+		.triggerTemplate = &sSpriteTemplate_GimmickTrigger,
+		.CanActivate = CanUseBirthright,
+		.ActivateGimmick = ActivateBirthright,
+	}
 };

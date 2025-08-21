@@ -190,7 +190,7 @@ static void DoTVShowLilycoveContestLady(void);
 
 static const struct {
     u16 species;
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
     u8 level;
     u8 location;
 } sPokeOutbreakSpeciesList[] = {
@@ -2185,7 +2185,7 @@ void TryPutBattleSeminarOnAir(u16 foeSpecies, u16 species, u8 moveIdx, const u16
         show->battleSeminar.foeSpecies = foeSpecies;
         show->battleSeminar.species = species;
         show->battleSeminar.move = movePtr[moveIdx];
-        for (i = 0, j = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0, j = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             if (i != moveIdx && movePtr[i])
             {

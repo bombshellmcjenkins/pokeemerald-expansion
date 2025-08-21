@@ -43,7 +43,8 @@
 #define TEMP_FLAGS_END   FLAG_TEMP_1F
 #define NUM_TEMP_FLAGS   (TEMP_FLAGS_END - TEMP_FLAGS_START + 1)
 
-#define FLAG_UNUSED_0x020    0x20 // Unused Flag
+//#define FLAG_UNUSED_0x020    0x20 // Unused Flag
+#define FLAG_MET_RIVAL_MOM                   0x20
 #define FLAG_UNUSED_0x021    0x21 // Unused Flag
 #define FLAG_UNUSED_0x022    0x22 // Unused Flag
 #define FLAG_UNUSED_0x023    0x23 // Unused Flag
@@ -102,7 +103,7 @@
 #define FLAG_UNUSED_0x055                    0x55  // Unused Flag
 
 #define FLAG_HIDE_CONTEST_POKE_BALL          0x56  // Always set after new game, object it hides is added directly
-#define FLAG_MET_RIVAL_MOM                   0x57
+// #define FLAG_MET_RIVAL_MOM                   0x57
 #define FLAG_BIRCH_AIDE_MET                  0x58
 #define FLAG_DECLINED_BIKE                   0x59
 #define FLAG_RECEIVED_BIKE                   0x5A
@@ -1222,6 +1223,7 @@
 #define FLAG_ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET                     0x491
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL                  0x492
 
+/*
 #define FLAG_UNUSED_0x493                                           0x493 // Unused Flag
 #define FLAG_UNUSED_0x494                                           0x494 // Unused Flag
 #define FLAG_UNUSED_0x495                                           0x495 // Unused Flag
@@ -1315,7 +1317,9 @@
 #define FLAG_UNUSED_0x4ED                                           0x4ED // Unused Flag
 #define FLAG_UNUSED_0x4EE                                           0x4EE // Unused Flag
 #define FLAG_UNUSED_0x4EF                                           0x4EF // Unused Flag
+*/
 
+/*
 #define FLAG_DEFEATED_RUSTBORO_GYM                                  0x4F0
 #define FLAG_DEFEATED_DEWFORD_GYM                                   0x4F1
 #define FLAG_DEFEATED_MAUVILLE_GYM                                  0x4F2
@@ -1325,22 +1329,41 @@
 #define FLAG_DEFEATED_MOSSDEEP_GYM                                  0x4F6
 #define FLAG_DEFEATED_SOOTOPOLIS_GYM                                0x4F7
 #define FLAG_DEFEATED_METEOR_FALLS_STEVEN                           0x4F8
+*/
 
-#define FLAG_UNUSED_0x4F9                                           0x4F9 // Unused Flag
-#define FLAG_UNUSED_0x4FA                                           0x4FA // Unused Flag
+#define FLAG_DEFEATED_RUSTBORO_GYM                                  0x492
+#define FLAG_DEFEATED_DEWFORD_GYM                                   0x493
+#define FLAG_DEFEATED_MAUVILLE_GYM                                  0x494
+#define FLAG_DEFEATED_LAVARIDGE_GYM                                 0x495
+#define FLAG_DEFEATED_PETALBURG_GYM                                 0x496
+#define FLAG_DEFEATED_FORTREE_GYM                                   0x497
+#define FLAG_DEFEATED_MOSSDEEP_GYM                                  0x498
+#define FLAG_DEFEATED_SOOTOPOLIS_GYM                                0x499
+#define FLAG_DEFEATED_METEOR_FALLS_STEVEN                           0x49A
 
+// #define FLAG_UNUSED_0x4F9                                           0x4F9 // Unused Flag
+// #define FLAG_UNUSED_0x4FA                                           0x4FA // Unused Flag
+
+/*
 #define FLAG_DEFEATED_ELITE_4_SIDNEY                                0x4FB
 #define FLAG_DEFEATED_ELITE_4_PHOEBE                                0x4FC
 #define FLAG_DEFEATED_ELITE_4_GLACIA                                0x4FD
 #define FLAG_DEFEATED_ELITE_4_DRAKE                                 0x4FE
+*/
 
-#define FLAG_UNUSED_0x4FF                                           0x4FF // Unused Flag
+#define FLAG_DEFEATED_ELITE_4_SIDNEY                                0x49B
+#define FLAG_DEFEATED_ELITE_4_PHOEBE                                0x49C
+#define FLAG_DEFEATED_ELITE_4_GLACIA                                0x49D
+#define FLAG_DEFEATED_ELITE_4_DRAKE                                 0x49E
+
+// #define FLAG_UNUSED_0x4FF                                           0x4FF // Unused Flag
 
 // Trainer Flags
 // Trainer flags occupy 0x500 - 0x85F, the last 9 of which are unused
 // See constants/opponents.h. The values there + FLAG_TRAINER_FLAG_START are the flag IDs
 
-#define TRAINER_FLAGS_START                                         0x500
+// #define TRAINER_FLAGS_START                                         0x500
+#define TRAINER_FLAGS_START                                         0x49F
 #define TRAINER_FLAGS_END                                           (TRAINER_FLAGS_START + MAX_TRAINERS_COUNT - 1) // 0x85F
 
 // System Flags

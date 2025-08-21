@@ -1204,9 +1204,14 @@
 	.4byte \failInstr
 	.endm
 
-	.macro unused2 ptr:req
+@	.macro unused2 ptr:req
+@	.byte 0xe1
+@	.4byte \ptr
+@	.endm
+
+	.macro disableselectedattack failInstr:req
 	.byte 0xe1
-	.4byte \ptr
+	.4byte \failInstr
 	.endm
 
 	.macro switchoutabilities battler:req
@@ -1230,8 +1235,13 @@
 	.byte 0xe5
 	.endm
 
-	.macro unused3
+@	.macro unused3
+@	.byte 0xe6
+@	.endm
+
+	.macro setshocktrap failInstr:req
 	.byte 0xe6
+	.4byte \failInstr
 	.endm
 
 	.macro unused4
@@ -2218,7 +2228,12 @@
 	various BS_TARGET, VARIOUS_EERIE_SPELL_PP_REDUCE
 	.4byte \failInstr
 	.endm
-
+	
+	.macro forceofwillppreduce failInstr:req
+	various BS_TARGET, VARIOUS_FORCE_OF_WILL_PP_REDUCE
+	.4byte \failInstr
+	.endm
+	
 	.macro jumpifteamhealthy battler:req, jumpInstr:req
 	various \battler, VARIOUS_JUMP_IF_TEAM_HEALTHY
 	.4byte \jumpInstr

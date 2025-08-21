@@ -9,6 +9,7 @@
 #include "battle_factory.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "battle_terastal.h"
 #include "data.h"
 #include "debug.h"
@@ -244,7 +245,7 @@ void BattleAI_SetupAIData(u8 defaultScoreMoves, u32 battler)
     memcpy(&AI_THINKING_STRUCT->aiFlags[0], &flags[0], sizeof(u32) * MAX_BATTLERS_COUNT);
 
     // Conditional score reset, unlike Ruby.
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (defaultScoreMoves & 1)
             SET_SCORE(battler, i, AI_SCORE_DEFAULT);
@@ -257,7 +258,7 @@ void BattleAI_SetupAIData(u8 defaultScoreMoves, u32 battler)
     moveLimitations = AI_DATA->moveLimitations[battler];
 
     // Ignore moves that aren't possible to use.
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if ((1u << i) & moveLimitations)
             SET_SCORE(battler, i, 0);
@@ -335,7 +336,7 @@ void Ai_InitPartyStruct(void)
             AI_PARTY->mons[B_SIDE_PLAYER][i].item = GetMonData(mon, MON_DATA_HELD_ITEM);
             AI_PARTY->mons[B_SIDE_PLAYER][i].heldEffect = ItemId_GetHoldEffect(AI_PARTY->mons[B_SIDE_PLAYER][i].item);
             AI_PARTY->mons[B_SIDE_PLAYER][i].ability = GetMonAbility(mon);
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
                 AI_PARTY->mons[B_SIDE_PLAYER][i].moves[j] = GetMonData(mon, MON_DATA_MOVE1 + j);
         }
     }
@@ -354,7 +355,7 @@ void Ai_UpdateSwitchInData(u32 battler)
             BATTLE_HISTORY->abilities[battler] = aiMon->ability;
         if (aiMon->heldEffect)
             BATTLE_HISTORY->itemEffects[battler] = aiMon->heldEffect;
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             if (aiMon->moves[i])
                 BATTLE_HISTORY->usedMoves[battler][i] = aiMon->moves[i];
@@ -425,7 +426,7 @@ static void SetBattlerAiMovesData(struct AiLogicData *aiData, u32 battlerAtk, u3
 
         SaveBattlerData(battlerDef);
         SetBattlerData(battlerDef);
-        for (moveIndex = 0; moveIndex < MAX_MON_MOVES; moveIndex++)
+        for (moveIndex = 0; moveIndex < MAX_SELECTABLE_MOVES; moveIndex++)
         {
             struct SimulatedDamage dmg = {0};
             u8 effectiveness = AI_EFFECTIVENESS_x0;
@@ -485,8 +486,8 @@ void SetAiLogicDataForTurn(struct AiLogicData *aiData)
 
 static u32 ChooseMoveOrAction_Singles(u32 battlerAi)
 {
-    u8 currentMoveArray[MAX_MON_MOVES];
-    u8 consideredMoveArray[MAX_MON_MOVES];
+    u8 currentMoveArray[MAX_SELECTABLE_MOVES];
+    u8 consideredMoveArray[MAX_SELECTABLE_MOVES];
     u32 numOfBestMoves;
     s32 i;
     u32 flags = AI_THINKING_STRUCT->aiFlags[battlerAi];
@@ -502,7 +503,7 @@ static u32 ChooseMoveOrAction_Singles(u32 battlerAi)
         AI_THINKING_STRUCT->aiLogicId++;
     }
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         gBattleStruct->aiFinalScore[battlerAi][gBattlerTarget][i] = AI_THINKING_STRUCT->score[i];
     }
@@ -517,7 +518,7 @@ static u32 ChooseMoveOrAction_Singles(u32 battlerAi)
     currentMoveArray[0] = AI_THINKING_STRUCT->score[0];
     consideredMoveArray[0] = 0;
 
-    for (i = 1; i < MAX_MON_MOVES; i++)
+    for (i = 1; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (gBattleMons[battlerAi].moves[i] != MOVE_NONE)
         {
@@ -545,8 +546,8 @@ static u32 ChooseMoveOrAction_Doubles(u32 battlerAi)
     s32 bestMovePointsForTarget[MAX_BATTLERS_COUNT];
     u8 mostViableTargetsArray[MAX_BATTLERS_COUNT];
     u8 actionOrMoveIndex[MAX_BATTLERS_COUNT];
-    s32 mostViableMovesScores[MAX_MON_MOVES];
-    u8 mostViableMovesIndices[MAX_MON_MOVES];
+    s32 mostViableMovesScores[MAX_SELECTABLE_MOVES];
+    u8 mostViableMovesIndices[MAX_SELECTABLE_MOVES];
     u32 mostViableTargetsNo;
     u32 mostViableMovesNo;
     s32 mostMovePoints;
@@ -595,7 +596,7 @@ static u32 ChooseMoveOrAction_Doubles(u32 battlerAi)
                 mostViableMovesScores[0] = AI_THINKING_STRUCT->score[0];
                 mostViableMovesIndices[0] = 0;
                 mostViableMovesNo = 1;
-                for (j = 1; j < MAX_MON_MOVES; j++)
+                for (j = 1; j < MAX_SELECTABLE_MOVES; j++)
                 {
                     if (gBattleMons[battlerAi].moves[j] != 0)
                     {
@@ -626,7 +627,7 @@ static u32 ChooseMoveOrAction_Doubles(u32 battlerAi)
                 }
             }
 
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
             {
                 gBattleStruct->aiFinalScore[battlerAi][gBattlerTarget][j] = AI_THINKING_STRUCT->score[j];
             }
@@ -697,7 +698,7 @@ static inline void BattleAI_DoAIProcessing(struct AI_ThinkingStruct *aiThink, u3
             aiThink->score[aiThink->movesetIndex] = 0;
         }
         aiThink->movesetIndex++;
-    } while (aiThink->movesetIndex < MAX_MON_MOVES && !(aiThink->aiAction & AI_ACTION_DO_NOT_ATTACK));
+    } while (aiThink->movesetIndex < MAX_SELECTABLE_MOVES && !(aiThink->aiAction & AI_ACTION_DO_NOT_ATTACK));
 
     aiThink->movesetIndex = 0;
 }
@@ -3068,15 +3069,15 @@ static s32 AI_CompareDamagingMoves(u32 battlerAtk, u32 battlerDef, u32 currId)
 {
     u32 i;
     bool32 multipleBestMoves = FALSE;
-    s32 viableMoveScores[MAX_MON_MOVES];
+    s32 viableMoveScores[MAX_SELECTABLE_MOVES];
     s32 bestViableMoveScore;
-    s32 noOfHits[MAX_MON_MOVES];
+    s32 noOfHits[MAX_SELECTABLE_MOVES];
     s32 score = 0;
     s32 leastHits = 1000;
     u16 *moves = GetMovesArray(battlerAtk);
-    bool8 isTwoTurnNotSemiInvulnerableMove[MAX_MON_MOVES];
+    bool8 isTwoTurnNotSemiInvulnerableMove[MAX_SELECTABLE_MOVES];
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && gMovesInfo[moves[i]].power)
         {
@@ -3114,7 +3115,7 @@ static s32 AI_CompareDamagingMoves(u32 battlerAtk, u32 battlerDef, u32 currId)
     // Current move requires the least hits to KO. Compare with other moves.
     if (leastHits == noOfHits[currId])
     {
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             if (i == currId)
                 continue;
@@ -3153,7 +3154,7 @@ static s32 AI_CompareDamagingMoves(u32 battlerAtk, u32 battlerDef, u32 currId)
         else
         {
             bestViableMoveScore = 0;
-            for (i = 0; i < MAX_MON_MOVES; i++)
+            for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
             {
                 if (viableMoveScores[i] > bestViableMoveScore)
                     bestViableMoveScore = viableMoveScores[i];

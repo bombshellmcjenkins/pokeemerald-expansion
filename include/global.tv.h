@@ -477,7 +477,7 @@ typedef union // size = 0x24
         /*0x01*/ bool8 active;
         /*0x02*/ u8 unused1;
         /*0x03*/ u8 unused3;
-        /*0x04*/ u16 moves[MAX_MON_MOVES];
+        /*0x04*/ u16 moves[MAX_LEARNED_MOVES];
         /*0x0C*/ u16 species;
         /*0x0E*/ u16 unused2;
         /*0x10*/ u8 locationMapNum;

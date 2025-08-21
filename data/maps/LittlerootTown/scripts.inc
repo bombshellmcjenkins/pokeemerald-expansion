@@ -407,9 +407,14 @@ LittlerootTown_EventScript_BrendansHouseSign::
 	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_EventScript_BirchsHouseSignFemale
 	releaseall
 	end
+	
+LittlerootTown_EventScript_PlayerHouseSign::
+	msgbox LittlerootTown_Text_PlayersHouse, MSGBOX_SIGN
+	end
 
 LittlerootTown_EventScript_PlayersHouseSignMale::
-	msgbox LittlerootTown_Text_PlayersHouse, MSGBOX_DEFAULT
+@	msgbox LittlerootTown_Text_PlayersHouse, MSGBOX_DEFAULT
+	msgbox LittlerootTown_Text_ChampsHouseMale, MSGBOX_DEFAULT
 	return
 
 LittlerootTown_EventScript_BirchsHouseSignFemale::
@@ -429,8 +434,13 @@ LittlerootTown_EventScript_BirchsHouseSignMale::
 	return
 
 LittlerootTown_EventScript_PlayersHouseSignFemale::
-	msgbox LittlerootTown_Text_PlayersHouse, MSGBOX_DEFAULT
+@	msgbox LittlerootTown_Text_PlayersHouse, MSGBOX_DEFAULT
+	msgbox LittlerootTown_Text_ChampsHouseFemale, MSGBOX_DEFAULT
 	return
+	
+LittlerootTown_EventScript_RivalHouseSign::
+	msgbox LittlerootTown_Text_RivalHouse, MSGBOX_SIGN
+	end
 
 LittlerootTown_EventScript_GiveRunningShoesTrigger0::
 	lockall
@@ -996,8 +1006,8 @@ LittlerootTown_Text_GoodLuckCatchingPokemon:
 	.string "Good luck!$"
 
 LittlerootTown_Text_TownSign:
-	.string "LITTLEROOT TOWN\n"
-	.string "“A town that can't be shaded any hue.”$"
+	.string "LITTLEROOT DISTRICT\n"
+	.string "“Where opportunity grows on trees.”$"
 
 LittlerootTown_Text_ProfBirchsLab:
 	.string "PROF. BIRCH'S POKéMON LAB$"
@@ -1007,6 +1017,15 @@ LittlerootTown_Text_PlayersHouse:
 
 LittlerootTown_Text_ProfBirchsHouse:
 	.string "PROF. BIRCH'S HOUSE$"
+	
+LittlerootTown_Text_ChampsHouseMale:
+	.string "BRENDAN'S HOUSE$"
+	
+LittlerootTown_Text_ChampsHouseFemale:
+	.string "MAY'S HOUSE$"
+	
+LittlerootTown_Text_RivalHouse:
+	.string "UR MOM'S HOUSE LUL$"
 
 LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 	.string "PROF. BIRCH: Well, well, {PLAYER}{KUN}!\n"

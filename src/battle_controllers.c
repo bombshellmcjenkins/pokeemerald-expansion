@@ -1576,7 +1576,7 @@ static u32 GetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId, u8 *
     case REQUEST_ALL_BATTLE:
         battleMon.species = GetMonData(&party[monId], MON_DATA_SPECIES);
         battleMon.item = GetMonData(&party[monId], MON_DATA_HELD_ITEM);
-        for (size = 0; size < MAX_MON_MOVES; size++)
+        for (size = 0; size < MAX_SELECTABLE_MOVES; size++)
         {
             battleMon.moves[size] = GetMonData(&party[monId], MON_DATA_MOVE1 + size);
             battleMon.pp[size] = GetMonData(&party[monId], MON_DATA_PP1 + size);
@@ -1633,7 +1633,7 @@ static u32 GetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId, u8 *
         size = 2;
         break;
     case REQUEST_MOVES_PP_BATTLE:
-        for (size = 0; size < MAX_MON_MOVES; size++)
+        for (size = 0; size < MAX_SELECTABLE_MOVES; size++)
         {
             moveData.moves[size] = GetMonData(&party[monId], MON_DATA_MOVE1 + size);
             moveData.pp[size] = GetMonData(&party[monId], MON_DATA_PP1 + size);
@@ -1653,7 +1653,7 @@ static u32 GetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId, u8 *
         size = 2;
         break;
     case REQUEST_PP_DATA_BATTLE:
-        for (size = 0; size < MAX_MON_MOVES; size++)
+        for (size = 0; size < MAX_SELECTABLE_MOVES; size++)
             dst[size] = GetMonData(&party[monId], MON_DATA_PP1 + size);
         dst[size] = GetMonData(&party[monId], MON_DATA_PP_BONUSES);
         size++;
@@ -1662,6 +1662,7 @@ static u32 GetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId, u8 *
     case REQUEST_PPMOVE2_BATTLE:
     case REQUEST_PPMOVE3_BATTLE:
     case REQUEST_PPMOVE4_BATTLE:
+	case REQUEST_PPINNATE_BATTLE:
         dst[0] = GetMonData(&party[monId], MON_DATA_PP1 + gBattleResources->bufferA[battler][1] - REQUEST_PPMOVE1_BATTLE);
         size = 1;
         break;
@@ -1891,7 +1892,7 @@ static void SetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId)
 
             SetMonData(&party[monId], MON_DATA_SPECIES, &battlePokemon->species);
             SetMonData(&party[monId], MON_DATA_HELD_ITEM, &battlePokemon->item);
-            for (i = 0; i < MAX_MON_MOVES; i++)
+            for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
             {
                 SetMonData(&party[monId], MON_DATA_MOVE1 + i, &battlePokemon->moves[i]);
                 SetMonData(&party[monId], MON_DATA_PP1 + i, &battlePokemon->pp[i]);
@@ -1930,7 +1931,7 @@ static void SetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId)
         SetMonData(&party[monId], MON_DATA_HELD_ITEM, &gBattleResources->bufferA[battler][3]);
         break;
     case REQUEST_MOVES_PP_BATTLE:
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             SetMonData(&party[monId], MON_DATA_MOVE1 + i, &moveData->moves[i]);
             SetMonData(&party[monId], MON_DATA_PP1 + i, &moveData->pp[i]);
@@ -1954,6 +1955,7 @@ static void SetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId)
     case REQUEST_PPMOVE2_BATTLE:
     case REQUEST_PPMOVE3_BATTLE:
     case REQUEST_PPMOVE4_BATTLE:
+	case REQUEST_PPINNATE_BATTLE:
         SetMonData(&party[monId], MON_DATA_PP1 + gBattleResources->bufferA[battler][1] - REQUEST_PPMOVE1_BATTLE, &gBattleResources->bufferA[battler][3]);
         break;
     case REQUEST_OTID_BATTLE:

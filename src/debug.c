@@ -3893,7 +3893,7 @@ static void DebugAction_Give_Pokemon_Move(u8 taskId)
         }
 
         //If NOT last move or selected MOVE_NONE ask for next move, else make mon
-        if (gTasks[taskId].tIterator < MAX_MON_MOVES - 1)
+        if (gTasks[taskId].tIterator < MAX_LEARNED_MOVES - 1)
         {
             gTasks[taskId].tIterator++;
             gTasks[taskId].tInput = 0;
@@ -3997,7 +3997,7 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId) //https://githu
     }
 
     //Moves
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         if (moves[i] == 0 || moves[i] == 0xFF || moves[i] >= MOVES_COUNT)
             continue;

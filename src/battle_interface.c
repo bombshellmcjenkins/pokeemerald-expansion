@@ -5,6 +5,7 @@
 #include "battle_controllers.h"
 #include "battle_interface.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "graphics.h"
 #include "sprite.h"
 #include "window.h"

@@ -724,8 +724,13 @@
 #define STRINGID_ELECTRICCURRENTISRUNNING             722
 #define STRINGID_SEEMSWEIRD                           723
 #define STRINGID_WAGGLINGAFINGER                      724
+#define STRINGID_PKMNHEATINGUP						  725
+#define STRINGID_SHOCKTRAPDMG						  726
+#define STRINGID_SHOCKTRAPSET						  727
+#define STRINGID_SHOCKTRAPDISAPPEAREDFROMTEAM		  728
+#define STRINGID_PKMNBLEWAWAYSHOCKTRAP				  729
 
-#define BATTLESTRINGS_COUNT                           725
+#define BATTLESTRINGS_COUNT                           730
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,
@@ -1041,6 +1046,8 @@
 #define B_MSG_POINTEDSTONESFLOAT 3
 #define B_MSG_SPIKESSCATTERED    4
 #define B_MSG_SHARPSTEELFLOATS   5
+#define B_MSG_SHOCKTRAPDMG		 6
+#define B_MSG_SHOCKTRAPSET		 7
 
 // gDamageNonTypesStartStringIds
 #define B_MSG_TRAPPED_WITH_VINES  0

@@ -300,7 +300,7 @@ void ContestAI_ResetAI(u8 contestantAI)
     int i;
     memset(&eContestAI, 0, sizeof(struct ContestAIInfo));
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
         eContestAI.moveScores[i] = 100;
 
     eContestAI.contestantId = contestantAI;
@@ -326,15 +326,15 @@ u8 ContestAI_GetActionToUse(void)
     {
         // Randomly choose a move index. If it's the move
         // with the highest (or tied highest) score, return
-        u8 moveIdx = MOD(Random(), MAX_MON_MOVES);
+        u8 moveIdx = MOD(Random(), MAX_LEARNED_MOVES);
         u8 score = eContestAI.moveScores[moveIdx];
         int i;
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_LEARNED_MOVES; i++)
         {
             if (score < eContestAI.moveScores[i])
                 break;
         }
-        if (i == MAX_MON_MOVES)
+        if (i == MAX_LEARNED_MOVES)
             return moveIdx;
     }
 }
@@ -369,7 +369,7 @@ static void ContestAI_DoAIProcessing(void)
                 if (eContestAI.aiAction & AI_ACTION_DONE)
                 {
                     eContestAI.nextMoveIndex++;
-                    if (eContestAI.nextMoveIndex < MAX_MON_MOVES)
+                    if (eContestAI.nextMoveIndex < MAX_LEARNED_MOVES)
                         eContestAI.aiState = 0;
                     else
                         // aiState = CONTESTAI_FINISHED
@@ -816,14 +816,14 @@ static void ContestAICmd_check_most_appealing_move(void)
     u16 move = gContestMons[eContestAI.contestantId].moves[eContestAI.nextMoveIndex];
     u8 appeal = gContestEffects[gMovesInfo[move].contestEffect].appeal;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         u16 newMove = gContestMons[eContestAI.contestantId].moves[i];
         if (newMove != 0 && appeal < gContestEffects[gMovesInfo[newMove].contestEffect].appeal)
             break;
     }
 
-    if (i == MAX_MON_MOVES)
+    if (i == MAX_LEARNED_MOVES)
         eContestAI.scriptResult = TRUE;
     else
         eContestAI.scriptResult = FALSE;
@@ -847,14 +847,14 @@ static void ContestAICmd_check_most_jamming_move(void)
     u16 move = gContestMons[eContestAI.contestantId].moves[eContestAI.nextMoveIndex];
     u8 jam = gContestEffects[gMovesInfo[move].contestEffect].jam;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         u16 newMove = gContestMons[eContestAI.contestantId].moves[i];
         if (newMove != MOVE_NONE && jam < gContestEffects[gMovesInfo[newMove].contestEffect].jam)
             break;
     }
 
-    if (i == MAX_MON_MOVES)
+    if (i == MAX_LEARNED_MOVES)
         eContestAI.scriptResult = TRUE;
     else
         eContestAI.scriptResult = FALSE;
@@ -1028,7 +1028,7 @@ static void ContestAICmd_check_combo_starter(void)
     int i;
     u16 move = gContestMons[eContestAI.contestantId].moves[eContestAI.nextMoveIndex];
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         if (gContestMons[eContestAI.contestantId].moves[i])
         {
@@ -1074,7 +1074,7 @@ static void ContestAICmd_check_combo_finisher(void)
     int i;
     u16 move = gContestMons[eContestAI.contestantId].moves[eContestAI.nextMoveIndex];
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         if (gContestMons[eContestAI.contestantId].moves[i])
         {
@@ -1696,7 +1696,7 @@ static void ContestAICmd_check_user_has_exciting_move(void)
     int result = 0;
     int i;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         if (gContestMons[eContestAI.contestantId].moves[i])
         {
@@ -1745,7 +1745,7 @@ static void ContestAICmd_check_user_has_move(void)
     int i;
     u16 targetMove = T1_READ_16(gAIScriptPtr + 1);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         #ifdef BUGFIX
         u16 move = gMovesInfo[gContestMons[eContestAI.contestantId].moves[i]].contestEffect;

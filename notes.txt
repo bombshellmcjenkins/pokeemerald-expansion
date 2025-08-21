@@ -1,0 +1,53 @@
+Pokemon Birthright notes
+
+--- Rival Notes ---
+Allow loss at every battle and keep track of record.
+Dialogue after 5th battle depending on record.
+
+0-5
+	"I've beaten you five times in a row..."
+	"Do you want some advice?"
+	[Yes]
+		"What do you want help with?"
+		[General]
+			"Battle prep is all about balancing Opportunity Cost!"
+			"For every Pokemon, move, or item you choose, you're giving up the
+			opportunity to have something else in that spot."
+			"Experiment to find what gives you the biggest bang for your buck!"
+		[Party]
+			"Check if several of your Pokemon are weak to the same types,
+			and make sure you have a way to deal with those types."
+			"Don't worry too much about having all your Pokemon be different types though."
+			"There are lots of different strategies, from balanced to all-out offence or defence."
+			"Find one that you like and commit to it!"
+		[Moves]
+			"Make sure your offensive Pokemon have a variety of moves."
+			"Like if you only have Fire attacks, you'll get walled by any Water-type."
+			"Don't ignore Status moves either!"
+			"If you can do it safely, just one boost to your Attack or Speed can be huge."
+		[Items]
+			"Some items have downsides, but they can be extremely powerful if you plan around it."
+			"For example, if you have a Choice Band, give it to a Pokemon that only uses physical attacks!"
+			"Or use a move like Trick to give it to your opponent and lock them into a harmless move!"
+			"Consumable items are kind of a downside too, but sometimes that one boost is all you need."
+		[Training]
+		
+	[No]
+		"I get it - you want to find your own way, right?"
+		"You can test your skills against me any time!"
+1-4 (or 4-1)
+	"That makes it [1-4]/[4-1]."
+	"But it's never too late for [you]/[me] to make a comeback!"
+2-3 (or 3-2)
+	"That makes it [2-3]/[3-2]."
+	"Looks like we're pretty evenly matched!"
+	"I couldn't have asked for a better rival."
+5-0
+	"You've beaten me five times in a row..."
+	"Am I that weak?"
+	[Yes]
+		"Hey! That was a rhetorical question!"
+		"Just wait - I'll take you down a notch next time!"
+	[No]
+		"No... We've both gotten a lot stronger as trainers."
+		"And I'm just gonna keep getting stronger - so don't get comfy!"

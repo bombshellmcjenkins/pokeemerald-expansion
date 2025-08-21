@@ -14,6 +14,7 @@
 #include "battle_tower.h"
 #include "battle_util.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "battle_gimmick.h"
 #include "berry.h"
 #include "bg.h"
@@ -1894,7 +1895,7 @@ void CustomTrainerPartyAssignMoves(struct Pokemon *mon, const struct TrainerMon 
     bool32 noMoveSet = TRUE;
     u32 j;
 
-    for (j = 0; j < MAX_MON_MOVES; ++j)
+    for (j = 0; j < MAX_LEARNED_MOVES; ++j)
     {
         if (partyEntry->moves[j] != MOVE_NONE)
             noMoveSet = FALSE;
@@ -1905,7 +1906,7 @@ void CustomTrainerPartyAssignMoves(struct Pokemon *mon, const struct TrainerMon 
         return;
     }
 
-    for (j = 0; j < MAX_MON_MOVES; ++j)
+    for (j = 0; j < MAX_LEARNED_MOVES; ++j)
     {
         SetMonData(mon, MON_DATA_MOVE1 + j, &partyEntry->moves[j]);
         SetMonData(mon, MON_DATA_PP1 + j, &gMovesInfo[partyEntry->moves[j]].pp);
@@ -4299,7 +4300,7 @@ static void HandleTurnActionSelectionState(void)
                         moveInfo.monTypes[1] = gBattleMons[battler].types[1];
                         moveInfo.monTypes[2] = gBattleMons[battler].types[2];
 
-                        for (i = 0; i < MAX_MON_MOVES; i++)
+                        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
                         {
                             moveInfo.moves[i] = gBattleMons[battler].moves[i];
                             moveInfo.currentPp[i] = gBattleMons[battler].pp[i];
@@ -4514,7 +4515,13 @@ static void HandleTurnActionSelectionState(void)
                             // Check to see if any gimmicks need to be prepared.
                             if (gBattleResources->bufferB[battler][2] & RET_GIMMICK)
                                 gBattleStruct->gimmick.toActivate |= 1u << battler;
-
+							
+							// Maybe this helps and doesn't break anything hopefully ???
+							if (GetActiveGimmick(battler) == GIMMICK_Z_MOVE || IsGimmickSelected(battler, GIMMICK_Z_MOVE))
+							{
+								gChosenMoveByBattler[battler] = GetUsableZMove(battler, MOVE_NONE);
+							}
+							
                             // Max Move check
                             if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX || IsGimmickSelected(battler, GIMMICK_DYNAMAX))
                             {
@@ -4839,8 +4846,9 @@ s8 GetMovePriority(u32 battler, u16 move)
     s8 priority;
     u16 ability = GetBattlerAbility(battler);
 
-    if (GetActiveGimmick(battler) == GIMMICK_Z_MOVE && gMovesInfo[move].power != 0)
-        move = GetUsableZMove(battler, move);
+ //   if (GetActiveGimmick(battler) == GIMMICK_Z_MOVE && gMovesInfo[move].power != 0)
+      if (GetActiveGimmick(battler) == GIMMICK_Z_MOVE)
+		move = GetUsableZMove(battler, move);
 
     priority = gMovesInfo[move].priority;
 

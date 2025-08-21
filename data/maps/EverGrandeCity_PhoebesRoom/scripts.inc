@@ -59,26 +59,44 @@ EverGrandeCity_PhoebesRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_PhoebesRoom_Text_IntroSpeech:
-	.string "Ahahaha!\p"
-	.string "I'm PHOEBE of the ELITE FOUR.\n"
-	.string "I did my training on MT. PYRE.\p"
-	.string "While I trained, I gained the ability\n"
-	.string "to commune with GHOST-type POKéMON.\p"
-	.string "Yes, the bond I developed with POKéMON\n"
-	.string "is extremely tight.\p"
-	.string "So, come on, just try and see if you can\n"
-	.string "even inflict damage on my POKéMON!$"
+	.string "Welcome.\p"
+	.string "I am Liza of the Elite Four.\l"
+	.string "I've trained with Psychic Pokémon\n"
+	.string "since I was a little girl, and\l"
+	.string "worked hard to earn my place here.\p"
+	.string "Have you sharpened your mind\n"
+	.string "enough to defeat me?\p"
+	.string "Let us see.$"
+	
+@	.string "Ahahaha!\p"
+@	.string "I'm PHOEBE of the ELITE FOUR.\n"
+@	.string "I did my training on MT. PYRE.\p"
+@	.string "While I trained, I gained the ability\n"
+@	.string "to commune with GHOST-type POKéMON.\p"
+@	.string "Yes, the bond I developed with POKéMON\n"
+@	.string "is extremely tight.\p"
+@	.string "So, come on, just try and see if you can\n"
+@	.string "even inflict damage on my POKéMON!$"
 
 EverGrandeCity_PhoebesRoom_Text_Defeat:
-	.string "Oh, darn.\n"
-	.string "I've gone and lost.$"
+	.string "Impressive...$"
+
+@	.string "Oh, darn.\n"
+@	.string "I've gone and lost.$"
 
 EverGrandeCity_PhoebesRoom_Text_PostBattleSpeech:
-	.string "There's a definite bond between you\n"
-	.string "and your POKéMON, too.\p"
-	.string "I didn't recognize it, so it's only\n"
-	.string "natural that I lost.\p"
-	.string "Yup, I'd like to see how far your bond\n"
-	.string "will carry you.\p"
-	.string "Go ahead, move on to the next room.$"
+	.string "Well fought.\n"
+	.string "You are clearly a superb strategist...\l"
+	.string "or just amassed such strength that\n"
+	.string "strategy no longer matters.\p"
+	.string "Your victory is earned either way.\l"
+	.string "You may proceed to the next room.$"
+
+@	.string "There's a definite bond between you\n"
+@	.string "and your POKéMON, too.\p"
+@	.string "I didn't recognize it, so it's only\n"
+@	.string "natural that I lost.\p"
+@	.string "Yup, I'd like to see how far your bond\n"
+@	.string "will carry you.\p"
+@	.string "Go ahead, move on to the next room.$"
 

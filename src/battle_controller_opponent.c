@@ -12,6 +12,7 @@
 #include "battle_tower.h"
 #include "battle_tv.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "bg.h"
 #include "data.h"
 #include "frontier_util.h"
@@ -566,10 +567,11 @@ static void OpponentHandleChooseMove(u32 battler)
                             gBattlerTarget = GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT);
                     }
                     // If opponent can and should use a gimmick (considering trainer data), do it
-                    if (gBattleStruct->gimmick.usableGimmick[battler] != GIMMICK_NONE
-                     && !(gBattleStruct->gimmick.usableGimmick[battler] == GIMMICK_Z_MOVE
-                     && !ShouldUseZMove(battler, gBattlerTarget, moveInfo->moves[chosenMoveId])))
-                    {
+ //                   if (gBattleStruct->gimmick.usableGimmick[battler] != GIMMICK_NONE
+ //                    && !(gBattleStruct->gimmick.usableGimmick[battler] == GIMMICK_Z_MOVE
+ //                    && !ShouldUseZMove(battler, gBattlerTarget, moveInfo->moves[chosenMoveId])))
+					if (FALSE) //testing - the way I have this set up, non-players don't need to "use" a gimmick anyway
+					{
                         BtlController_EmitTwoReturnValues(battler, BUFFER_B, 10, (chosenMoveId) | (RET_GIMMICK) | (gBattlerTarget << 8));
                     }
                     else

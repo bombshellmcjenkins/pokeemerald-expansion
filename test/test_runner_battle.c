@@ -765,7 +765,7 @@ static const char *const sBattleActionNames[] =
 static u32 CountAiExpectMoves(struct ExpectedAIAction *expectedAction, u32 battlerId, bool32 printLog)
 {
     u32 i, countExpected = 0;
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if ((1u << i) & expectedAction->moveSlots)
         {
@@ -799,7 +799,7 @@ void TestRunner_Battle_CheckChosenMove(u32 battlerId, u32 moveId, u32 target)
         if (expectedAction->explicitTarget && expectedAction->target != target)
             Test_ExitWithResult(TEST_RESULT_FAIL, SourceLine(0), ":L%s:%d: Expected target %s, got %s", filename, expectedAction->sourceLine, BattlerIdentifier(expectedAction->target), BattlerIdentifier(target));
 
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             if ((1u << i) & expectedAction->moveSlots)
             {
@@ -906,7 +906,7 @@ static void CheckIfMaxScoreEqualExpectMove(u32 battlerId, s32 target, struct Exp
     s32 *scores = gBattleStruct->aiFinalScore[battlerId][target];
     s32 bestScore = 0, bestScoreId = 0;
     u16 *moves = gBattleMons[battlerId].moves;
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (scores[i] > bestScore)
         {
@@ -914,7 +914,7 @@ static void CheckIfMaxScoreEqualExpectMove(u32 battlerId, s32 target, struct Exp
             bestScoreId = i;
         }
     }
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         // We expect move 'i', but it has the same best score as another move that we didn't expect.
         if (scores[i] == scores[bestScoreId]
@@ -982,7 +982,7 @@ static void PrintAiMoveLog(u32 battlerId, u32 moveSlot, u32 moveId, s32 totalSco
 static void ClearAiLog(u32 battlerId)
 {
     u32 i, j;
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         struct AILogLine *logs = DATA.aiLogLines[battlerId][i];
         for (j = 0; j < MAX_AI_LOG_LINES; j++)
@@ -1548,7 +1548,7 @@ void OpenPokemon(u32 sourceLine, u32 side, u32 species)
 
     CreateMon(DATA.currentMon, species, 100, 0, TRUE, 0, OT_ID_PRESET, 0);
     data = MOVE_NONE;
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         SetMonData(DATA.currentMon, MON_DATA_MOVE1 + i, &data);
 }
 
@@ -1756,11 +1756,11 @@ void Item_(u32 sourceLine, u32 item)
     SetMonData(DATA.currentMon, MON_DATA_HELD_ITEM, &item);
 }
 
-void Moves_(u32 sourceLine, u16 moves[MAX_MON_MOVES])
+void Moves_(u32 sourceLine, u16 moves[MAX_SELECTABLE_MOVES])
 {
     s32 i;
     INVALID_IF(!DATA.currentMon, "Moves outside of PLAYER/OPPONENT");
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] == MOVE_NONE)
             break;
@@ -1771,11 +1771,11 @@ void Moves_(u32 sourceLine, u16 moves[MAX_MON_MOVES])
     DATA.explicitMoves[DATA.currentSide] |= 1 << DATA.currentPartyIndex;
 }
 
-void MovesWithPP_(u32 sourceLine, struct moveWithPP moveWithPP[MAX_MON_MOVES])
+void MovesWithPP_(u32 sourceLine, struct moveWithPP moveWithPP[MAX_SELECTABLE_MOVES])
 {
     s32 i;
     INVALID_IF(!DATA.currentMon, "Moves outside of PLAYER/OPPONENT");
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moveWithPP[i].moveId == MOVE_NONE)
             break;
@@ -2072,7 +2072,7 @@ void MoveGetIdAndSlot(s32 battlerId, struct MoveContext *ctx, u32 *moveId, u32 *
     if (ctx->explicitMove)
     {
         INVALID_IF(ctx->move == MOVE_NONE || ctx->move >= MOVES_COUNT, "Illegal move: %d", ctx->move);
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             *moveId = GetMonData(mon, MON_DATA_MOVE1 + i);
             if (*moveId == ctx->move)
@@ -2090,7 +2090,7 @@ void MoveGetIdAndSlot(s32 battlerId, struct MoveContext *ctx, u32 *moveId, u32 *
                 break;
             }
         }
-        INVALID_IF(i == MAX_MON_MOVES, "Too many different moves for %s", BattlerIdentifier(battlerId));
+        INVALID_IF(i == MAX_SELECTABLE_MOVES, "Too many different moves for %s", BattlerIdentifier(battlerId));
     }
     else if (ctx->explicitMoveSlot)
     {
@@ -2114,7 +2114,8 @@ void MoveGetIdAndSlot(s32 battlerId, struct MoveContext *ctx, u32 *moveId, u32 *
         INVALID_IF(ctx->gimmick == GIMMICK_MEGA && holdEffect != HOLD_EFFECT_MEGA_STONE && species != SPECIES_RAYQUAZA, "Cannot Mega Evolve without a Mega Stone");
         INVALID_IF(ctx->gimmick == GIMMICK_Z_MOVE && holdEffect != HOLD_EFFECT_Z_CRYSTAL, "Cannot use a Z-Move without a Z-Crystal");
         INVALID_IF(ctx->gimmick == GIMMICK_Z_MOVE && ItemId_GetSecondaryId(item) != gMovesInfo[*moveId].type
-                   && GetSignatureZMove(*moveId, species, item) == MOVE_NONE
+ //                  && GetSignatureZMove(*moveId, species, item) == MOVE_NONE
+                   && GetSignatureZMove(species) == MOVE_NONE
                    && *moveId != MOVE_PHOTON_GEYSER, // exception because test won't recognize Ultra Necrozma pre-Burst
                    "Cannot turn %S into a Z-Move with %S", GetMoveName(ctx->move), ItemId_GetName(item));
         INVALID_IF(ctx->gimmick != GIMMICK_MEGA && holdEffect == HOLD_EFFECT_MEGA_STONE, "Cannot use another gimmick while holding a Mega Stone");
@@ -2467,12 +2468,12 @@ void UseItem(u32 sourceLine, struct BattlePokemon *battler, struct ItemContext c
     if (ItemId_GetType(ctx.itemId) == ITEM_USE_PARTY_MENU_MOVES)
     {
         INVALID_IF(!ctx.explicitMove, "%S requires an explicit move", ItemId_GetName(ctx.itemId));
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             if (GetMonData(CurrentMon(battlerId), MON_DATA_MOVE1 + i, NULL) == ctx.move)
                 break;
         }
-        INVALID_IF(i == MAX_MON_MOVES, "USE_ITEM on invalid move: %d", ctx.move);
+        INVALID_IF(i == MAX_SELECTABLE_MOVES, "USE_ITEM on invalid move: %d", ctx.move);
     }
     else
     {

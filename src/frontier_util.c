@@ -46,7 +46,7 @@ struct FrontierBrainMon
     u8 fixedIV;
     u8 nature;
     u8 evs[NUM_STATS];
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
 };
 
 struct FrontierBrain
@@ -2199,15 +2199,15 @@ static void ResetSketchedMoves(void)
         u16 monId = gSaveBlock2Ptr->frontier.selectedPartyMons[i] - 1;
         if (monId < PARTY_SIZE)
         {
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_LEARNED_MOVES; j++)
             {
-                for (k = 0; k < MAX_MON_MOVES; k++)
+                for (k = 0; k < MAX_LEARNED_MOVES; k++)
                 {
                     if (GetMonData(&gSaveBlock1Ptr->playerParty[gSaveBlock2Ptr->frontier.selectedPartyMons[i] - 1], MON_DATA_MOVE1 + k, NULL)
                         == GetMonData(&gPlayerParty[i], MON_DATA_MOVE1 + j, NULL))
                         break;
                 }
-                if (k == MAX_MON_MOVES)
+                if (k == MAX_LEARNED_MOVES)
                     SetMonMoveSlot(&gPlayerParty[i], MOVE_SKETCH, j);
             }
             gSaveBlock1Ptr->playerParty[gSaveBlock2Ptr->frontier.selectedPartyMons[i] - 1] = gPlayerParty[i];
@@ -2540,7 +2540,7 @@ void CreateFrontierBrainPokemon(void)
         for (j = 0; j < NUM_STATS; j++)
             SetMonData(&gEnemyParty[monPartyId], MON_DATA_HP_EV + j, &sFrontierBrainsMons[facility][symbol][i].evs[j]);
         friendship = MAX_FRIENDSHIP;
-        for (j = 0; j < MAX_MON_MOVES; j++)
+        for (j = 0; j < MAX_LEARNED_MOVES; j++)
         {
             SetMonMoveSlot(&gEnemyParty[monPartyId], sFrontierBrainsMons[facility][symbol][i].moves[j], j);
             if (gMovesInfo[sFrontierBrainsMons[facility][symbol][i].moves[j]].effect == EFFECT_FRUSTRATION)

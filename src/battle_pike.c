@@ -36,7 +36,7 @@ struct PikeWildMon
 {
     u16 species;
     u8 levelDelta;
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
 };
 
 // IWRAM bss
@@ -795,7 +795,7 @@ static void HealMon(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_HP, data);
 
     ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         u16 move = GetMonData(mon, MON_DATA_MOVE1 + i);
         data[0] = CalculatePPWithBonus(move, ppBonuses, i);
@@ -1146,7 +1146,7 @@ bool32 TryGenerateBattlePikeWildMon(bool8 checkKeenEyeIntimidate)
     else
         abilityNum = 0;
     SetMonData(&gEnemyParty[0], MON_DATA_ABILITY_NUM, &abilityNum);
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
         SetMonMoveSlot(&gEnemyParty[0], wildMons[headerId][pikeMonId].moves[i], i);
 
     CalculateMonStats(&gEnemyParty[0]);
@@ -1290,7 +1290,7 @@ static void TryHealMons(u8 healCount)
         else
         {
             u8 ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_LEARNED_MOVES; j++)
             {
                 u16 move = GetMonData(mon, MON_DATA_MOVE1 + j);
                 max = CalculatePPWithBonus(move, ppBonuses, j);
@@ -1556,7 +1556,7 @@ static void IsPartyFullHealed(void)
         if (curr >= max && GetAilmentFromStatus(GetMonData(mon, MON_DATA_STATUS)) == AILMENT_NONE)
         {
             u8 ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_LEARNED_MOVES; j++)
             {
                 u16 move = GetMonData(mon, MON_DATA_MOVE1 + j);
                 max = CalculatePPWithBonus(move, ppBonuses, j);

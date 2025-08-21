@@ -98,7 +98,7 @@ struct ContestPokemon
     u8 aiPool_Cute:1;
     u8 aiPool_Smart:1;
     u8 aiPool_Tough:1;
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
     u8 cool;
     u8 beauty;
     u8 cute;
@@ -233,7 +233,7 @@ struct ContestAIInfo
     /*0x00*/ u8 aiState;
     /*0x02*/ u16 nextMove;
     /*0x04*/ u8 nextMoveIndex;
-    /*0x05*/ u8 moveScores[MAX_MON_MOVES];
+    /*0x05*/ u8 moveScores[MAX_LEARNED_MOVES];
     /*0x09*/ u8 aiAction;
     /*0x0A*/ u8 filler[6];
     /*0x10*/ u8 currentAIFlag;

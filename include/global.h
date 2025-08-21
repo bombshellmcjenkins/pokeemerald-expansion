@@ -274,7 +274,7 @@ struct BerryCrush
 struct ApprenticeMon
 {
     u16 species;
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_SELECTABLE_MOVES];
     u16 item;
 };
 
@@ -300,7 +300,7 @@ struct BattleTowerPokemon
 {
     u16 species;
     u16 heldItem;
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
     u8 level;
     u8 ppBonuses;
     u8 hpEV;
@@ -365,7 +365,7 @@ struct BattleTowerEReaderTrainer
 // For displaying party information on the player's Battle Dome tourney page
 struct DomeMonData
 {
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
     u8 evs[NUM_STATS];
     u8 nature;
     //u8 padding;
@@ -569,7 +569,7 @@ extern struct SaveBlock2 *gSaveBlock2Ptr;
 struct SecretBaseParty
 {
     u32 personality[PARTY_SIZE];
-    u16 moves[PARTY_SIZE * MAX_MON_MOVES];
+    u16 moves[PARTY_SIZE * MAX_LEARNED_MOVES];
     u16 species[PARTY_SIZE];
     u16 heldItems[PARTY_SIZE];
     u8 levels[PARTY_SIZE];
@@ -1070,7 +1070,7 @@ struct SaveBlock1
     /*0x2B94*/ u8 outbreakPokemonLevel;
     /*0x2B95*/ u8 outbreakUnused1;
     /*0x2B96*/ u16 outbreakUnused2;
-    /*0x2B98*/ u16 outbreakPokemonMoves[MAX_MON_MOVES];
+    /*0x2B98*/ u16 outbreakPokemonMoves[MAX_LEARNED_MOVES];
     /*0x2BA0*/ u8 outbreakUnused3;
     /*0x2BA1*/ u8 outbreakPokemonProbability;
     /*0x2BA2*/ u16 outbreakDaysLeft;

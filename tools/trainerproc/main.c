@@ -18,6 +18,8 @@
 #define MAX_TRAINER_ITEMS 4
 #define PARTY_SIZE 6
 #define MAX_MON_MOVES 4
+#define MAX_LEARNED_MOVES 4
+#define MAX_SELECTABLE_MOVES 5
 
 struct String
 {
@@ -79,7 +81,7 @@ struct Pokemon
     struct String tera_type;
     int tera_type_line;
 
-    struct String moves[MAX_MON_MOVES];
+    struct String moves[MAX_SELECTABLE_MOVES];
     int moves_n;
     int move1_line;
 };
@@ -1393,7 +1395,7 @@ static bool parse_trainer(struct Parser *p, const struct Parsed *parsed, struct 
         }
 
         // Parse moves.
-        for (int j = 0; j < MAX_MON_MOVES; j++)
+        for (int j = 0; j < MAX_SELECTABLE_MOVES; j++)
         {
             struct Token move;
             if (!parse_pokemon_move(p, &move))

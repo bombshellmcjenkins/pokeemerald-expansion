@@ -2797,7 +2797,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
 
     // Add field moves to action list
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         for (j = 0; j != FIELD_MOVES_COUNT; j++)
         {
@@ -5127,7 +5127,7 @@ static void ShowMoveSelectWindow(u8 slot)
     u8 windowId = DisplaySelectionWindow(SELECTWINDOW_MOVES);
     u16 move;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         move = GetMonData(&gPlayerParty[slot], MON_DATA_MOVE1 + i);
         AddTextPrinterParameterized(windowId, fontId, GetMoveName(move), 8, (i * 16) + 1, TEXT_SKIP_DRAW, NULL);
@@ -5262,7 +5262,7 @@ bool8 MonKnowsMove(struct Pokemon *mon, u16 move)
 {
     u8 i;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (GetMonData(mon, MON_DATA_MOVE1 + i) == move)
             return TRUE;
@@ -5274,7 +5274,7 @@ bool8 BoxMonKnowsMove(struct BoxPokemon *boxMon, u16 move)
 {
     u8 i;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (GetBoxMonData(boxMon, MON_DATA_MOVE1 + i) == move)
             return TRUE;
@@ -5431,7 +5431,7 @@ static void Task_ReturnToPartyMenuWhileLearningMove(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
-        if (GetMoveSlotToReplace() != MAX_MON_MOVES)
+        if (GetMoveSlotToReplace() != MAX_LEARNED_MOVES)
             DisplayPartyMenuForgotMoveMessage(taskId);
         else
             StopLearningMovePrompt(taskId);
@@ -6056,14 +6056,14 @@ void DeleteMove(struct Pokemon *mon, u32 move)
 
     if (move != MOVE_NONE)
     {
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_LEARNED_MOVES; i++)
         {
             u32 existingMove = GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, NULL);
             if (existingMove == move)
             {
                 SetMonMoveSlot(mon, MOVE_NONE, i);
                 RemoveMonPPBonus(mon, i);
-                for (j = i; j < MAX_MON_MOVES - 1; j++)
+                for (j = i; j < MAX_LEARNED_MOVES - 1; j++)
                     ShiftMoveSlot(mon, j, j + 1);
                 break;
             }
@@ -6076,7 +6076,7 @@ bool32 DoesMonHaveAnyMoves(struct Pokemon *mon)
     struct BoxPokemon *boxMon = &mon->box;
     u32 i;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         u32 existingMove = GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, NULL);
         if (existingMove != MOVE_NONE)
@@ -7689,7 +7689,7 @@ void GetNumMovesSelectedMonHas(void)
     u8 i;
 
     gSpecialVar_Result = 0;
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_MOVE1 + i) != MOVE_NONE)
             gSpecialVar_Result++;
@@ -7711,7 +7711,7 @@ void MoveDeleterForgetMove(void)
 
     SetMonMoveSlot(&gPlayerParty[gSpecialVar_0x8004], MOVE_NONE, gSpecialVar_0x8005);
     RemoveMonPPBonus(&gPlayerParty[gSpecialVar_0x8004], gSpecialVar_0x8005);
-    for (i = gSpecialVar_0x8005; i < MAX_MON_MOVES - 1; i++)
+    for (i = gSpecialVar_0x8005; i < MAX_LEARNED_MOVES - 1; i++)
         ShiftMoveSlot(&gPlayerParty[gSpecialVar_0x8004], i, i + 1);
 }
 
@@ -7757,7 +7757,7 @@ void IsLastMonThatKnowsSurf(void)
         {
             if (i != gSpecialVar_0x8004)
             {
-                for (j = 0; j < MAX_MON_MOVES; j++)
+                for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
                 {
                     if (GetMonData(&gPlayerParty[i], MON_DATA_MOVE1 + j) == MOVE_SURF)
                         return;

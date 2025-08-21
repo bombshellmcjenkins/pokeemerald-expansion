@@ -409,8 +409,18 @@ void LaunchBattleAnimation(u32 animType, u32 animId)
         sBattleAnimScriptPtr = sBattleAnims_Special[animId];
         break;
     }
-    gAnimScriptActive = TRUE;
-    sAnimFramesToWait = 0;
+	
+	// Disable animation for Z Move
+	if (animId == B_ANIM_ZMOVE_ACTIVATE)
+	{
+		gAnimScriptActive = FALSE;
+	}
+	else
+	{
+		gAnimScriptActive = TRUE;
+    }
+	
+	sAnimFramesToWait = 0;
     gAnimScriptCallback = RunAnimScriptCommand;
 
     for (i = 0; i < ANIM_SPRITE_INDEX_COUNT; i++)

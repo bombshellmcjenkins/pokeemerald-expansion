@@ -1956,12 +1956,12 @@ static u8 GetMonNicknameWidth(u8 *str, u8 whichParty, u8 partyIdx)
 
 static void BufferMovesString(u8 *str, u8 whichParty, u8 partyIdx)
 {
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
     u16 i;
 
     if (!sTradeMenu->isEgg[whichParty][partyIdx])
     {
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_LEARNED_MOVES; i++)
         {
             if (whichParty == TRADE_PLAYER)
                 moves[i] = GetMonData(&gPlayerParty[partyIdx], i + MON_DATA_MOVE1, NULL);
@@ -1971,7 +1971,7 @@ static void BufferMovesString(u8 *str, u8 whichParty, u8 partyIdx)
 
         StringCopy(str, sText_EmptyString);
 
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_LEARNED_MOVES; i++)
         {
             if (moves[i] != MOVE_NONE)
                 StringAppend(str, GetMoveName(moves[i]));

@@ -729,7 +729,7 @@ static void DoMoveRelearnerMain(void)
     case MENU_STATE_TRY_OVERWRITE_MOVE:
         if (!gPaletteFade.active)
         {
-            if (sMoveRelearnerStruct->moveSlot == MAX_MON_MOVES)
+            if (sMoveRelearnerStruct->moveSlot == MAX_LEARNED_MOVES)
             {
                 sMoveRelearnerStruct->state = MENU_STATE_PRINT_STOP_TEACHING;
             }

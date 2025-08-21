@@ -8,6 +8,7 @@
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "battle_gimmick.h"
 #include "party_menu.h"
 #include "pokemon.h"
@@ -147,6 +148,11 @@ void HandleAction_UseMove(void)
     gBattleScripting.savedMoveEffect = 0;
     gCurrMovePos = gChosenMovePos = *(gBattleStruct->chosenMovePositions + gBattlerAttacker);
 
+	if (GetActiveGimmick(gBattlerAttacker) == GIMMICK_BIRTHRIGHT)
+	{
+		gCurrMovePos = MAX_SELECTABLE_MOVES - 1;
+	}
+	
     // choose move
     if (gProtectStructs[gBattlerAttacker].noValidMoves)
     {
@@ -160,14 +166,19 @@ void HandleAction_UseMove(void)
         gCurrentMove = gChosenMove = gLockedMoves[gBattlerAttacker];
     }
     // encore forces you to use the same move
-    else if (GetActiveGimmick(gBattlerAttacker) != GIMMICK_Z_MOVE && gDisableStructs[gBattlerAttacker].encoredMove != MOVE_NONE
-             && gDisableStructs[gBattlerAttacker].encoredMove == gBattleMons[gBattlerAttacker].moves[gDisableStructs[gBattlerAttacker].encoredMovePos])
+	// Removed this from start of if to allow encore BR move: GetActiveGimmick(gBattlerAttacker) != GIMMICK_Z_MOVE && 
+	// Also added check for if encored move = BR move
+    else if (gDisableStructs[gBattlerAttacker].encoredMove != MOVE_NONE
+             && (gDisableStructs[gBattlerAttacker].encoredMove == gBattleMons[gBattlerAttacker].moves[gDisableStructs[gBattlerAttacker].encoredMovePos]
+			 || gDisableStructs[gBattlerAttacker].encoredMove == GetUsableZMove(gBattlerAttacker,MOVE_NONE))
+			 )
     {
         gCurrentMove = gChosenMove = gDisableStructs[gBattlerAttacker].encoredMove;
         gCurrMovePos = gChosenMovePos = gDisableStructs[gBattlerAttacker].encoredMovePos;
         *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, NO_TARGET_OVERRIDE);
     }
     // check if the encored move wasn't overwritten
+	// OK to leave zmove check here since BR move can't change mid battle... unless...?
     else if (GetActiveGimmick(gBattlerAttacker) != GIMMICK_Z_MOVE && gDisableStructs[gBattlerAttacker].encoredMove != MOVE_NONE
           && gDisableStructs[gBattlerAttacker].encoredMove != gBattleMons[gBattlerAttacker].moves[gDisableStructs[gBattlerAttacker].encoredMovePos])
     {
@@ -178,22 +189,23 @@ void HandleAction_UseMove(void)
         gDisableStructs[gBattlerAttacker].encoreTimer = 0;
         *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, NO_TARGET_OVERRIDE);
     }
+/*
     else if (gBattleMons[gBattlerAttacker].moves[gCurrMovePos] != gChosenMoveByBattler[gBattlerAttacker])
     {
         gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
         *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, NO_TARGET_OVERRIDE);
+		// This gBattleStruct->moveTarget thing is now using the target of the underlying move
     }
+*/	
+	else if (GetActiveGimmick(gBattlerAttacker) == GIMMICK_Z_MOVE)
+	{	//  But like, if they're using their innate move, fucking use the target type of the innate move
+		gCurrentMove = gChosenMove = gSpeciesInfo[gBattleMons[gBattlerAttacker].species].innateMove;
+        *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, NO_TARGET_OVERRIDE);
+	}
+	
     else
     {
         gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
-    }
-
-    if (IsBattlerAlive(gBattlerAttacker))
-    {
-        if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-            gBattleResults.lastUsedMovePlayer = gCurrentMove;
-        else
-            gBattleResults.lastUsedMoveOpponent = gCurrentMove;
     }
 
     // Set dynamic move type.
@@ -201,10 +213,15 @@ void HandleAction_UseMove(void)
     moveType = GetMoveType(gCurrentMove);
 
     // check Z-Move used
-    if (GetActiveGimmick(gBattlerAttacker) == GIMMICK_Z_MOVE && !IS_MOVE_STATUS(gCurrentMove) && !IsZMove(gCurrentMove))
+	// What if we don't
+/*
+    if (GetActiveGimmick(gBattlerAttacker) == GIMMICK_Z_MOVE && !IsZMove(gCurrentMove)) // && !IS_MOVE_STATUS(gCurrentMove) 
     {
         gBattleStruct->categoryOverride = gMovesInfo[gCurrentMove].category;
         gCurrentMove = gChosenMove = GetUsableZMove(gBattlerAttacker, gCurrentMove);
+		//gCurrentMove should now be the BR move
+		// try this again?
+		*(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, NO_TARGET_OVERRIDE);
     }
     // check Max Move used
     else if (GetActiveGimmick(gBattlerAttacker) == GIMMICK_DYNAMAX)
@@ -212,8 +229,16 @@ void HandleAction_UseMove(void)
         gBattleStruct->categoryOverride = gMovesInfo[gCurrentMove].category;
         gCurrentMove = gChosenMove = GetMaxMove(gBattlerAttacker, gCurrentMove);
     }
-
+*/
     moveTarget = GetBattlerMoveTargetType(gBattlerAttacker, gCurrentMove);
+	
+    if (IsBattlerAlive(gBattlerAttacker))
+    {
+        if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+            gBattleResults.lastUsedMovePlayer = gCurrentMove;
+        else
+            gBattleResults.lastUsedMoveOpponent = gCurrentMove;
+    }
 
     // choose target
     side = BATTLE_OPPOSITE(GetBattlerSide(gBattlerAttacker));
@@ -1224,6 +1249,8 @@ u32 TrySetCantSelectMoveBattleScript(u32 battler)
     u32 holdEffect = GetBattlerHoldEffect(battler, TRUE);
     u16 *choicedMove = &gBattleStruct->choicedMove[battler];
 
+	// TODO: Test if the moveId coming from bufferB is set correctly when using Birthright
+
     if (DYNAMAX_BYPASS_CHECK && GetActiveGimmick(gBattlerAttacker) != GIMMICK_Z_MOVE && gDisableStructs[battler].disabledMove == move && move != MOVE_NONE)
     {
         gBattleScripting.battler = battler;
@@ -1469,7 +1496,7 @@ u8 CheckMoveLimitations(u32 battler, u8 unusableMoves, u16 check)
 
     gPotentialItemEffectBattler = battler;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         move = gBattleMons[battler].moves[i];
         moveEffect = gMovesInfo[move].effect;
@@ -1528,7 +1555,7 @@ u8 CheckMoveLimitations(u32 battler, u8 unusableMoves, u16 check)
     return unusableMoves;
 }
 
-#define ALL_MOVES_MASK ((1 << MAX_MON_MOVES) - 1)
+#define ALL_MOVES_MASK ((1 << MAX_SELECTABLE_MOVES) - 1)
 bool32 AreAllMovesUnusable(u32 battler)
 {
     u8 unusable = CheckMoveLimitations(battler, 0, MOVE_LIMITATIONS_ALL);
@@ -1557,12 +1584,12 @@ u8 GetImprisonedMovesCount(u32 battler, u16 move)
         if (battlerSide != GetBattlerSide(i) && gStatuses3[i] & STATUS3_IMPRISONED_OTHERS)
         {
             s32 j;
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
             {
                 if (move == gBattleMons[i].moves[j])
                     break;
             }
-            if (j < MAX_MON_MOVES)
+            if (j < MAX_SELECTABLE_MOVES)
                 imprisonedMoves++;
         }
     }
@@ -2706,12 +2733,12 @@ u8 DoBattlerEndTurnEffects(void)
         case ENDTURN_DISABLE:  // disable
             if (gDisableStructs[battler].disableTimer != 0)
             {
-                for (i = 0; i < MAX_MON_MOVES; i++)
+                for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
                 {
                     if (gDisableStructs[battler].disabledMove == gBattleMons[battler].moves[i])
                         break;
                 }
-                if (i == MAX_MON_MOVES)  // Pokémon does not have the disabled move anymore
+                if (i == MAX_SELECTABLE_MOVES)  // Pokémon does not have the disabled move anymore
                 {
                     gDisableStructs[battler].disabledMove = 0;
                     gDisableStructs[battler].disableTimer = 0;
@@ -4001,14 +4028,14 @@ static void ForewarnChooseMove(u32 battler)
         u16 moveId;
     };
     u32 i, j, bestId, count;
-    struct Forewarn *data = Alloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_MON_MOVES);
+    struct Forewarn *data = Alloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_SELECTABLE_MOVES);
 
     // Put all moves
     for (count = 0, i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
         if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(battler))
         {
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
             {
                 if (gBattleMons[i].moves[j] == MOVE_NONE)
                     continue;
@@ -4647,7 +4674,7 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 {
                     if (IsBattlerAlive(i) && side != GetBattlerSide(i))
                     {
-                        for (j = 0; j < MAX_MON_MOVES; j++)
+                        for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
                         {
                             move = gBattleMons[i].moves[j];
                             moveType = GetMoveType(move);
@@ -7009,13 +7036,14 @@ u32 TryHandleSeed(u32 battler, u32 terrainFlag, u32 statId, u32 itemId, enum Ite
     return 0;
 }
 
+// TO DO: Allow restoring innate move PP?
 static u32 ItemRestorePp(u32 battler, u32 itemId, enum ItemEffect caseID)
 {
     struct Pokemon *party = GetBattlerParty(battler);
     struct Pokemon *mon = &party[gBattlerPartyIndexes[battler]];
     u32 i, changedPP = 0;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         u32 move = GetMonData(mon, MON_DATA_MOVE1 + i);
         u32 currentPP = GetMonData(mon, MON_DATA_PP1 + i);
@@ -8392,7 +8420,7 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
         }
         else
         {
-            targetBattler = SetRandomTarget(gBattlerAttacker);
+            targetBattler = SetRandomTarget(gBattlerAttacker); // ???????????????????
             if (moveType == TYPE_ELECTRIC
                 && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_LIGHTNING_ROD)
                 && GetBattlerAbility(targetBattler) != ABILITY_LIGHTNING_ROD)
@@ -8523,7 +8551,7 @@ u8 GetAttackerObedienceForAction()
             return DISOBEYS_LOAFS;
         else // use a random move
             do
-                gCurrMovePos = gChosenMovePos = MOD(Random(), MAX_MON_MOVES);
+                gCurrMovePos = gChosenMovePos = MOD(Random(), MAX_SELECTABLE_MOVES);
             while ((1u << gCurrMovePos) & calc);
         return DISOBEYS_RANDOM_MOVE;
     }
@@ -8713,7 +8741,7 @@ u32 GetMoveSlot(u16 *moves, u32 move)
 {
     u32 i;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (moves[i] == move)
             break;
@@ -8925,8 +8953,9 @@ static inline u32 CalcMoveBasePower(struct DamageCalculationData *damageCalcData
     u32 weight, hpFraction, speed;
 
     if (GetActiveGimmick(battlerAtk) == GIMMICK_Z_MOVE)
-        return GetZMovePower(gBattleStruct->zmove.baseMoves[battlerAtk]);
-
+       // return GetZMovePower(gBattleStruct->zmove.baseMoves[battlerAtk]);
+		return GetZMovePower(gBattleMons[battlerAtk].species);
+		
     if (GetActiveGimmick(battlerAtk) == GIMMICK_DYNAMAX)
         return GetMaxMovePower(move);
 
@@ -9010,7 +9039,7 @@ static inline u32 CalcMoveBasePower(struct DamageCalculationData *damageCalcData
         break;
     case EFFECT_TRUMP_CARD:
         i = GetMoveSlot(gBattleMons[battlerAtk].moves, move);
-        if (i != MAX_MON_MOVES)
+        if (i != MAX_SELECTABLE_MOVES)
         {
             if (gBattleMons[battlerAtk].pp[i] >= ARRAY_COUNT(sTrumpCardPowerTable))
                 basePower = sTrumpCardPowerTable[ARRAY_COUNT(sTrumpCardPowerTable) - 1];
@@ -9238,6 +9267,8 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
         modifier = uq4_12_multiply(modifier, UQ_4_12(1.0) + sPercentToModifier[gSpecialStatuses[battlerAtk].gemParam]);
     if (gStatuses3[battlerAtk] & STATUS3_CHARGED_UP && moveType == TYPE_ELECTRIC)
         modifier = uq4_12_multiply(modifier, UQ_4_12(2.0));
+	if (gStatuses3[battlerAtk] & STATUS3_FURNACE && moveType == TYPE_FIRE)
+		modifier = uq4_12_multiply(modifier, UQ_4_12(2.0));
     if (gStatuses3[battlerAtk] & STATUS3_ME_FIRST)
         modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
     if (IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_GRASSY_TERRAIN) && moveType == TYPE_GRASS)
@@ -10044,7 +10075,10 @@ static inline uq4_12_t GetGlaiveRushModifier(u32 battlerDef)
 
 static inline uq4_12_t GetZMaxMoveAgainstProtectionModifier(struct DamageCalculationData *damageCalcData)
 {
-    if ((IsZMove(damageCalcData->move) || IsMaxMove(damageCalcData->move)) && IS_BATTLER_PROTECTED(damageCalcData->battlerDef))
+	// IsZMove checks if the actual move is in the "Z Moves" section of moves info, which birthright moves will not be
+	
+   if ((IsZMove(damageCalcData->move) || IsMaxMove(damageCalcData->move)) && IS_BATTLER_PROTECTED(damageCalcData->battlerDef))
+
         return UQ_4_12(0.25);
     return UQ_4_12(1.0);
 }
@@ -11207,6 +11241,7 @@ u8 GetBattleMoveCategory(u32 moveId)
     if (gBattleStruct != NULL && gBattleStruct->swapDamageCategory) // Photon Geyser, Shell Side Arm, Light That Burns the Sky, Tera Blast
         return SwapMoveDamageCategory(moveId);
     if (gBattleStruct != NULL && (IsZMove(moveId) || IsMaxMove(moveId))) // TODO: Might be buggy depending on when this is called.
+	// IsZMove will be false so this doesn't affect us
         return gBattleStruct->categoryOverride;
     if (B_PHYSICAL_SPECIAL_SPLIT >= GEN_4)
         return gMovesInfo[moveId].category;

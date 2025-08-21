@@ -48,7 +48,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
 
     [ABILITY_DAMP] =
     {
-        .name = _("Damp"),
+        .name = _("Moist"),
         .description = COMPOUND_STRING("Prevents self-destruction."),
         .aiRating = 2,
         .breakable = TRUE,

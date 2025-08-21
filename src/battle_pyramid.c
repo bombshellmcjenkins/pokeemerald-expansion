@@ -49,7 +49,7 @@ struct PyramidWildMon
     u16 species;
     u8 lvl;
     u8 abilityNum;
-    u16 moves[MAX_MON_MOVES];
+    u16 moves[MAX_LEARNED_MOVES];
 };
 
 struct PyramidFloorTemplate
@@ -1217,14 +1217,14 @@ static void RestorePyramidPlayerParty(void)
         {
             if (GetMonData(&gSaveBlock1Ptr->playerParty[partyIndex], MON_DATA_SPECIES, NULL) == GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL))
             {
-                for (k = 0; k < MAX_MON_MOVES; k++)
+                for (k = 0; k < MAX_LEARNED_MOVES; k++)
                 {
-                    for (l = 0; l < MAX_MON_MOVES; l++)
+                    for (l = 0; l < MAX_LEARNED_MOVES; l++)
                     {
                         if (GetMonData(&gSaveBlock1Ptr->playerParty[partyIndex], MON_DATA_MOVE1 + l, NULL) == GetMonData(&gPlayerParty[j], MON_DATA_MOVE1 + k, NULL))
                             break;
                     }
-                    if (l == MAX_MON_MOVES)
+                    if (l == MAX_LEARNED_MOVES)
                         SetMonMoveSlot(&gPlayerParty[j], MOVE_SKETCH, k);
                 }
                 gSaveBlock1Ptr->playerParty[partyIndex] = gPlayerParty[j];
@@ -1505,7 +1505,7 @@ void GenerateBattlePyramidWildMon(void)
             if (!MonKnowsMove(&gEnemyParty[0], id))
             {
                 // replace random move
-                SetMonData(&gEnemyParty[0], MON_DATA_MOVE1 + Random() % MAX_MON_MOVES, &id);
+                SetMonData(&gEnemyParty[0], MON_DATA_MOVE1 + Random() % MAX_LEARNED_MOVES, &id);
                 break;
             }
             i++;
@@ -1615,7 +1615,7 @@ void GenerateBattlePyramidWildMon(void)
         break;
     }
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
         SetMonMoveSlot(&gEnemyParty[0], wildMons[id].moves[i], i);
 
     // UB: Reading outside the array as lvl was used for mon level instead of frontier lvl mode.

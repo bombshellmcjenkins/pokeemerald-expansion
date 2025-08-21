@@ -9,6 +9,7 @@
 #include "battle_setup.h"
 #include "battle_tv.h"
 #include "battle_z_move.h"
+#include "battle_birthright.h"
 #include "battle_gimmick.h"
 #include "bg.h"
 #include "data.h"
@@ -665,6 +666,8 @@ void HandleInputChooseMove(u32 battler)
     u16 moveTarget;
     u32 canSelectTarget = 0;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
+	bool8 viewingGimmick = gBattleStruct->zmove.viewing || gBattleStruct->viewingBirthright;
+	// replace gBattleStruct->zmove.viewing with viewingGimmick
 
     if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
@@ -675,29 +678,41 @@ void HandleInputChooseMove(u32 battler)
     {
         PlaySE(SE_SELECT);
 
-        moveTarget = GetBattlerMoveTargetType(battler, moveInfo->moves[gMoveSelectionCursor[battler]]);
-
         if (gBattleStruct->zmove.viewing)
         {
+			gMoveSelectionCursor[battler] = MAX_SELECTABLE_MOVES - 1;
             gBattleStruct->zmove.viewing = FALSE;
+			/*
             if (gMovesInfo[moveInfo->moves[gMoveSelectionCursor[battler]]].category != DAMAGE_CATEGORY_STATUS)
-                moveTarget = MOVE_TARGET_SELECTED;  //damaging z moves always have selected target
+                moveTarget = MOVE_TARGET_SELECTED; 
+			*/
         }
+		
+		if (gBattleStruct->viewingBirthright)
+		{
+			gMoveSelectionCursor[battler] = MAX_SELECTABLE_MOVES - 1;
+			gBattleStruct->viewingBirthright = FALSE;
+		}
+		
+		moveTarget = GetBattlerMoveTargetType(battler, moveInfo->moves[gMoveSelectionCursor[battler]]);
 
         // Status moves turn into Max Guard when Dynamaxed, targets user.
+		/*
         if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX || IsGimmickSelected(battler, GIMMICK_DYNAMAX))
             moveTarget = gMovesInfo[GetMaxMove(battler, moveInfo->moves[gMoveSelectionCursor[battler]])].target;
-
+		*/
+		
         if (moveTarget & MOVE_TARGET_USER)
             gMultiUsePlayerCursor = battler;
         else
             gMultiUsePlayerCursor = GetBattlerAtPosition(BATTLE_OPPOSITE(GetBattlerSide(battler)));
-
+		
         if (!gBattleResources->bufferA[battler][1]) // not a double battle
         {
             if (moveTarget & MOVE_TARGET_USER_OR_SELECTED && !gBattleResources->bufferA[battler][2])
                 canSelectTarget = 1;
         }
+		
         else // double battle
         {
             if (!(moveTarget & (MOVE_TARGET_RANDOM | MOVE_TARGET_BOTH | MOVE_TARGET_DEPENDS | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_USER | MOVE_TARGET_ALLY)))
@@ -773,10 +788,13 @@ void HandleInputChooseMove(u32 battler)
     {
         PlaySE(SE_SELECT);
         gBattleStruct->gimmick.playerSelect = FALSE;
-        if (gBattleStruct->zmove.viewing)
+		
+        if (viewingGimmick)
         {
             ReloadMoveNames(battler);
+			gMoveSelectionCursor[battler] = 0;
         }
+
         else
         {
             BtlController_EmitTwoReturnValues(battler, BUFFER_B, 10, 0xFFFF);
@@ -784,7 +802,7 @@ void HandleInputChooseMove(u32 battler)
             PlayerBufferExecCompleted(battler);
         }
     }
-    else if (JOY_NEW(DPAD_LEFT) && !gBattleStruct->zmove.viewing)
+    else if (JOY_NEW(DPAD_LEFT) && !viewingGimmick)
     {
         if (gMoveSelectionCursor[battler] & 1)
         {
@@ -799,7 +817,7 @@ void HandleInputChooseMove(u32 battler)
             TryChangeZTrigger(battler, gMoveSelectionCursor[battler]);
         }
     }
-    else if (JOY_NEW(DPAD_RIGHT) && !gBattleStruct->zmove.viewing)
+    else if (JOY_NEW(DPAD_RIGHT) && !viewingGimmick)
     {
         if (!(gMoveSelectionCursor[battler] & 1)
          && (gMoveSelectionCursor[battler] ^ 1) < gNumberOfMovesToChoose)
@@ -815,7 +833,7 @@ void HandleInputChooseMove(u32 battler)
             TryChangeZTrigger(battler, gMoveSelectionCursor[battler]);
         }
     }
-    else if (JOY_NEW(DPAD_UP) && !gBattleStruct->zmove.viewing)
+    else if (JOY_NEW(DPAD_UP) && !viewingGimmick)
     {
         if (gMoveSelectionCursor[battler] & 2)
         {
@@ -830,7 +848,7 @@ void HandleInputChooseMove(u32 battler)
             TryChangeZTrigger(battler, gMoveSelectionCursor[battler]);
         }
     }
-    else if (JOY_NEW(DPAD_DOWN) && !gBattleStruct->zmove.viewing)
+    else if (JOY_NEW(DPAD_DOWN) && !viewingGimmick)
     {
         if (!(gMoveSelectionCursor[battler] & 2)
          && (gMoveSelectionCursor[battler] ^ 2) < gNumberOfMovesToChoose)
@@ -846,7 +864,7 @@ void HandleInputChooseMove(u32 battler)
             TryChangeZTrigger(battler, gMoveSelectionCursor[battler]);
         }
     }
-    else if (JOY_NEW(SELECT_BUTTON) && !gBattleStruct->zmove.viewing && !gBattleStruct->descriptionSubmenu)
+    else if (JOY_NEW(SELECT_BUTTON) && !viewingGimmick && !gBattleStruct->descriptionSubmenu)
     {
         if (gNumberOfMovesToChoose > 1 && !(gBattleTypeFlags & BATTLE_TYPE_LINK))
         {
@@ -905,11 +923,19 @@ static void ReloadMoveNames(u32 battler)
         struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
         MoveSelectionDisplayZMove(GetUsableZMove(battler, moveInfo->moves[gMoveSelectionCursor[battler]]), battler);
     }
+	// added else if to handle birthright
+	else if (CanUseBirthright(battler) && !gBattleStruct->viewingBirthright)
+	{
+//		struct ChooseMoveStruct *moveinfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
+		MoveSelectionDisplayBirthright(battler);
+	}
     else
     {
         gBattleStruct->zmove.viewing = FALSE;
+		gBattleStruct->viewingBirthright = FALSE;
         MoveSelectionDestroyCursorAt(battler);
         MoveSelectionDisplayMoveNames(battler);
+		gMoveSelectionCursor[battler] = 0;
         MoveSelectionCreateCursorAt(gMoveSelectionCursor[battler], 0);
         MoveSelectionDisplayPpNumber(battler);
         MoveSelectionDisplayMoveType(battler);
@@ -968,7 +994,7 @@ static u32 UNUSED HandleMoveInputUnused(u32 battler)
 
 void HandleMoveSwitching(u32 battler)
 {
-    u8 perMovePPBonuses[MAX_MON_MOVES];
+    u8 perMovePPBonuses[MAX_LEARNED_MOVES];
     struct ChooseMoveStruct moveStruct;
     u8 totalPPBonuses;
 
@@ -1003,7 +1029,7 @@ void HandleMoveSwitching(u32 battler)
 
             MoveSelectionDisplayMoveNames(battler);
 
-            for (i = 0; i < MAX_MON_MOVES; i++)
+            for (i = 0; i < MAX_LEARNED_MOVES; i++)
                 perMovePPBonuses[i] = (gBattleMons[battler].ppBonuses & (3 << (i * 2))) >> (i * 2);
 
             totalPPBonuses = perMovePPBonuses[gMoveSelectionCursor[battler]];
@@ -1011,12 +1037,12 @@ void HandleMoveSwitching(u32 battler)
             perMovePPBonuses[gMultiUsePlayerCursor] = totalPPBonuses;
 
             totalPPBonuses = 0;
-            for (i = 0; i < MAX_MON_MOVES; i++)
+            for (i = 0; i < MAX_LEARNED_MOVES; i++)
                 totalPPBonuses |= perMovePPBonuses[i] << (i * 2);
 
             gBattleMons[battler].ppBonuses = totalPPBonuses;
 
-            for (i = 0; i < MAX_MON_MOVES; i++)
+            for (i = 0; i < MAX_LEARNED_MOVES; i++)
             {
                 gBattleMons[battler].moves[i] = moveInfo->moves[i];
                 gBattleMons[battler].pp[i] = moveInfo->currentPp[i];
@@ -1024,14 +1050,14 @@ void HandleMoveSwitching(u32 battler)
 
             if (!(gBattleMons[battler].status2 & STATUS2_TRANSFORMED))
             {
-                for (i = 0; i < MAX_MON_MOVES; i++)
+                for (i = 0; i < MAX_LEARNED_MOVES; i++)
                 {
                     moveStruct.moves[i] = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_MOVE1 + i);
                     moveStruct.currentPp[i] = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_PP1 + i);
                 }
 
                 totalPPBonuses = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_PP_BONUSES);
-                for (i = 0; i < MAX_MON_MOVES; i++)
+                for (i = 0; i < MAX_LEARNED_MOVES; i++)
                     perMovePPBonuses[i] = (totalPPBonuses & (3 << (i * 2))) >> (i * 2);
 
                 i = moveStruct.moves[gMoveSelectionCursor[battler]];
@@ -1047,10 +1073,10 @@ void HandleMoveSwitching(u32 battler)
                 perMovePPBonuses[gMultiUsePlayerCursor] = totalPPBonuses;
 
                 totalPPBonuses = 0;
-                for (i = 0; i < MAX_MON_MOVES; i++)
+                for (i = 0; i < MAX_LEARNED_MOVES; i++)
                     totalPPBonuses |= perMovePPBonuses[i] << (i * 2);
 
-                for (i = 0; i < MAX_MON_MOVES; i++)
+                for (i = 0; i < MAX_LEARNED_MOVES; i++)
                 {
                     SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_MOVE1 + i, &moveStruct.moves[i]);
                     SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_PP1 + i, &moveStruct.currentPp[i]);
@@ -1671,7 +1697,7 @@ static void MoveSelectionDisplayMoveNames(u32 battler)
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
     gNumberOfMovesToChoose = 0;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         MoveSelectionDestroyCursorAt(i);
         if (IsGimmickSelected(battler, GIMMICK_DYNAMAX) || GetActiveGimmick(battler) == GIMMICK_DYNAMAX)

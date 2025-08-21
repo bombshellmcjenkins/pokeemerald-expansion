@@ -342,7 +342,7 @@ void BattleTv_SetDataBasedOnString(u16 stringId)
     defMon = GetPartyBattlerData(gBattlerTarget);
     moveSlot = GetBattlerMoveSlotId(gBattlerAttacker, gBattleMsgDataPtr->currentMove);
 
-    if (moveSlot >= MAX_MON_MOVES && IsNotSpecialBattleString(stringId) && stringId > BATTLESTRINGS_TABLE_START)
+    if (moveSlot >= MAX_SELECTABLE_MOVES && IsNotSpecialBattleString(stringId) && stringId > BATTLESTRINGS_TABLE_START)
     {
         tvPtr->side[atkSide].faintCause = FNT_OTHER;
         return;
@@ -755,7 +755,7 @@ void BattleTv_SetDataBasedOnMove(u16 move, u16 weatherFlags, struct DisableStruc
     defSide = GetBattlerSide(gBattlerTarget);
     moveSlot = GetBattlerMoveSlotId(gBattlerAttacker, move);
 
-    if (moveSlot >= MAX_MON_MOVES)
+    if (moveSlot >= MAX_SELECTABLE_MOVES)
     {
         tvPtr->side[atkSide].faintCause = FNT_OTHER;
         return;
@@ -852,7 +852,7 @@ void TryPutLinkBattleTvShowOnAir(void)
         species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
         if (species != SPECIES_NONE && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL))
         {
-            for (sum = 0, j = 0; j < MAX_MON_MOVES; j++)
+            for (sum = 0, j = 0; j < MAX_SELECTABLE_MOVES; j++)
                 sum += movePoints->points[zero][i * 4 + j];
 
             if (playerBestSum < sum)
@@ -866,7 +866,7 @@ void TryPutLinkBattleTvShowOnAir(void)
         species = GetMonData(&gEnemyParty[i], MON_DATA_SPECIES, NULL);
         if (species != SPECIES_NONE && !GetMonData(&gEnemyParty[i], MON_DATA_IS_EGG, NULL))
         {
-            for (sum = 0, j = 0; j < MAX_MON_MOVES; j++)
+            for (sum = 0, j = 0; j < MAX_SELECTABLE_MOVES; j++)
                 sum += movePoints->points[one][i * 4 + j];
 
             if (opponentBestSum == sum)
@@ -887,7 +887,7 @@ void TryPutLinkBattleTvShowOnAir(void)
         }
     }
 
-    for (sum = 0, i = 0, j = 0; j < MAX_MON_MOVES; j++)
+    for (sum = 0, i = 0, j = 0; j < MAX_SELECTABLE_MOVES; j++)
     {
         if (sum < movePoints->points[zero][playerBestMonId * 4 + j])
         {
@@ -1211,7 +1211,7 @@ static void AddPointsOnFainting(bool8 targetFainted)
 static void TrySetBattleSeminarShow(void)
 {
     s32 i;
-    s32 dmgByMove[MAX_MON_MOVES];
+    s32 dmgByMove[MAX_SELECTABLE_MOVES];
     u16 powerOverride;
     u16 currMoveSaved;
 
@@ -1244,7 +1244,7 @@ static void TrySetBattleSeminarShow(void)
 
     dmgByMove[gMoveSelectionCursor[gBattlerAttacker]] = gBattleMoveDamage;
     currMoveSaved = gCurrentMove;
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         gCurrentMove = gBattleMons[gBattlerAttacker].moves[i];
         powerOverride = 0;
@@ -1265,7 +1265,7 @@ static void TrySetBattleSeminarShow(void)
         }
     }
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         if (i != gMoveSelectionCursor[gBattlerAttacker] && dmgByMove[i] > dmgByMove[gMoveSelectionCursor[gBattlerAttacker]])
         {
@@ -1277,7 +1277,7 @@ static void TrySetBattleSeminarShow(void)
             else
                 bestMoveId = 1;
 
-            for (i = 0; i < MAX_MON_MOVES; i++)
+            for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
             {
                 if (i != gMoveSelectionCursor[gBattlerAttacker] && dmgByMove[i] > dmgByMove[bestMoveId])
                     bestMoveId = i;
@@ -1366,7 +1366,7 @@ u8 GetBattlerMoveSlotId(u8 battlerId, u16 moveId)
     i = 0;
     while (1)
     {
-        if (i >= MAX_MON_MOVES)
+        if (i >= MAX_SELECTABLE_MOVES)
             break;
         if (GetMonData(&party[gBattlerPartyIndexes[battlerId]], MON_DATA_MOVE1 + i, NULL) == moveId)
             break;

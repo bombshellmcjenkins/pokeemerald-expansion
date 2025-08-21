@@ -7,6 +7,8 @@
 #define SECTOR_FOOTER_SIZE 12
 #define SECTOR_SIZE (SECTOR_DATA_SIZE + SAVE_BLOCK_3_CHUNK_SIZE + SECTOR_FOOTER_SIZE)
 
+// How do you access these save slots? Can I just change this to 1?
+// This doesn't work how you think it works. The two slots are an intentional redundancy
 #define NUM_SAVE_SLOTS 2
 
 // If the sector's signature field is not this value then the sector is either invalid or empty.

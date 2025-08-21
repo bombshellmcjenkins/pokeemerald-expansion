@@ -105,7 +105,7 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
     defType2 = gBattleMons[battler].types[1];
 
     // Check AI moves for damage dealt
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         aiMove = gBattleMons[battler].moves[i];
         aiMoveEffect = gMovesInfo[aiMove].effect;
@@ -153,7 +153,7 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
     }
 
     // Get max damage mon could take
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         playerMove = gBattleMons[opposingBattler].moves[i];
         if (playerMove != MOVE_NONE && gMovesInfo[playerMove].power != 0)
@@ -244,7 +244,7 @@ static bool32 ShouldSwitchIfAllMovesBad(u32 battler)
     if (IsDoubleBattle())
     {
         u32 opposingPartner = GetBattlerAtPosition(BATTLE_PARTNER(opposingBattler));
-        for (moveIndex = 0; moveIndex < MAX_MON_MOVES; moveIndex++)
+        for (moveIndex = 0; moveIndex < MAX_SELECTABLE_MOVES; moveIndex++)
         {
             aiMove = gBattleMons[battler].moves[moveIndex];
             if ((AI_GetMoveEffectiveness(aiMove, battler, opposingBattler) > AI_EFFECTIVENESS_x0
@@ -255,7 +255,7 @@ static bool32 ShouldSwitchIfAllMovesBad(u32 battler)
     }
     else
     {
-        for (moveIndex = 0; moveIndex < MAX_MON_MOVES; moveIndex++)
+        for (moveIndex = 0; moveIndex < MAX_SELECTABLE_MOVES; moveIndex++)
         {
             aiMove = gBattleMons[battler].moves[moveIndex];
             if (AI_GetMoveEffectiveness(aiMove, battler, opposingBattler) > AI_EFFECTIVENESS_x0 && aiMove != MOVE_NONE)
@@ -282,7 +282,7 @@ static bool32 FindMonThatHitsWonderGuard(u32 battler)
         return FALSE;
 
     // Check if Pokémon has a super effective move.
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         move = gBattleMons[battler].moves[i];
         if (move != MOVE_NONE)
@@ -306,7 +306,7 @@ static bool32 FindMonThatHitsWonderGuard(u32 battler)
         if (IsAceMon(battler, i))
             continue;
 
-        for (j = 0; j < MAX_MON_MOVES; j++)
+        for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
         {
             move = GetMonData(&party[i], MON_DATA_MOVE1 + j);
             if (move != MOVE_NONE)
@@ -623,7 +623,7 @@ static bool32 HasSuperEffectiveMoveAgainstOpponents(u32 battler, bool32 noRng)
 
     if (!(gAbsentBattlerFlags & (1u << opposingBattler)))
     {
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             move = gBattleMons[battler].moves[i];
             if (move == MOVE_NONE)
@@ -645,7 +645,7 @@ static bool32 HasSuperEffectiveMoveAgainstOpponents(u32 battler, bool32 noRng)
 
     if (!(gAbsentBattlerFlags & (1u << opposingBattler)))
     {
-        for (i = 0; i < MAX_MON_MOVES; i++)
+        for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
         {
             move = gBattleMons[battler].moves[i];
             if (move == MOVE_NONE)
@@ -741,7 +741,7 @@ static bool32 FindMonWithFlagsAndSuperEffective(u32 battler, u16 flags, u32 perc
         {
             battlerIn1 = gLastHitBy[battler];
 
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
             {
                 move = GetMonData(&party[i], MON_DATA_MOVE1 + j);
                 if (move == 0)
@@ -804,7 +804,7 @@ static bool32 CanMonSurviveHazardSwitchin(u32 battler)
             if (IsAceMon(battler, i))
                 continue;
 
-            for (j = 0; j < MAX_MON_MOVES; j++)
+            for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
             {
                 aiMove = GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL);
                 if (MoveHasAdditionalEffectSelf(aiMove, MOVE_EFFECT_RAPID_SPIN)
@@ -1135,7 +1135,7 @@ static u32 GetBestMonBatonPass(struct Pokemon *party, int firstId, int lastId, u
         if (invalidMons & (1u << i))
             continue;
 
-        for (j = 0; j < MAX_MON_MOVES; j++)
+        for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
         {
             if (GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL) == MOVE_BATON_PASS)
             {
@@ -1198,14 +1198,14 @@ static u32 GetBestMonTypeMatchup(struct Pokemon *party, int firstId, int lastId,
         // Ok, we know the mon has the right typing but does it have at least one super effective move?
         if (bestMonId != PARTY_SIZE)
         {
-            for (i = 0; i < MAX_MON_MOVES; i++)
+            for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
             {
                 u32 move = GetMonData(&party[bestMonId], MON_DATA_MOVE1 + i);
                 if (move != MOVE_NONE && AI_GetMoveEffectiveness(move, battler, opposingBattler) >= AI_EFFECTIVENESS_x2)
                     break;
             }
 
-            if (i != MAX_MON_MOVES)
+            if (i != MAX_SELECTABLE_MOVES)
                 return bestMonId; // Has both the typing and at least one super effective move.
 
             bits |= (1u << bestMonId); // Sorry buddy, we want something better.
@@ -1235,7 +1235,7 @@ static u32 GetBestMonDmg(struct Pokemon *party, int firstId, int lastId, u8 inva
         if ((1 << (i)) & invalidMons)
             continue;
         InitializeSwitchinCandidate(&party[i]);
-        for (j = 0; j < MAX_MON_MOVES; j++)
+        for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
         {
             aiMove = AI_DATA->switchinCandidate.battleMon.moves[j];
             if (aiMove != MOVE_NONE && gMovesInfo[aiMove].power != 0)
@@ -1691,7 +1691,7 @@ static s32 GetMaxDamagePlayerCouldDealToSwitchin(u32 battler, u32 opposingBattle
     u32 playerMove;
     s32 damageTaken = 0, maxDamageTaken = 0;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_SELECTABLE_MOVES; i++)
     {
         playerMove = gBattleMons[opposingBattler].moves[i];
         if (playerMove != MOVE_NONE && gMovesInfo[playerMove].power != 0)
@@ -1818,7 +1818,7 @@ static u32 GetBestMonIntegrated(struct Pokemon *party, int firstId, int lastId, 
         }
 
         // Check through current mon's moves
-        for (j = 0; j < MAX_MON_MOVES; j++)
+        for (j = 0; j < MAX_SELECTABLE_MOVES; j++)
         {
             aiMove = AI_DATA->switchinCandidate.battleMon.moves[j];
 

@@ -1624,7 +1624,7 @@ static void Task_ShowMoveSelectScreen(u8 taskId)
     gBattle_BG0_Y = DISPLAY_HEIGHT;
     gBattle_BG2_Y = DISPLAY_HEIGHT;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         u16 move = gContestMons[gContestPlayerMonIndex].moves[i];
         u8 *moveNameBuffer = moveName;
@@ -1660,7 +1660,7 @@ static void Task_HandleMoveSelectInput(u8 taskId)
     u8 numMoves = 0;
     s32 i;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         if (gContestMons[gContestPlayerMonIndex].moves[i] != MOVE_NONE)
             numMoves++;
@@ -1767,7 +1767,7 @@ static void Task_HideMoveSelectScreen(u8 taskId)
     gBattle_BG2_Y = 0;
     SetBottomSliderHeartsInvisibility(FALSE);
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (i = 0; i < MAX_LEARNED_MOVES; i++)
     {
         FillWindowPixelBuffer(MOVE_WINDOWS_START + i, PIXEL_FILL(0));
         PutWindowTilemap(MOVE_WINDOWS_START + i);

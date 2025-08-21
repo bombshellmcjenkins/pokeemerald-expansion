@@ -15,6 +15,7 @@ enum {
     REQUEST_PPMOVE2_BATTLE,
     REQUEST_PPMOVE3_BATTLE,
     REQUEST_PPMOVE4_BATTLE,
+	REQUEST_PPINNATE_BATTLE,
     REQUEST_UNUSED_13_BATTLE,
     REQUEST_UNUSED_14_BATTLE,
     REQUEST_UNUSED_15_BATTLE,
@@ -114,16 +115,16 @@ struct HpAndStatus
 
 struct MovePpInfo
 {
-    u16 moves[MAX_MON_MOVES];
-    u8 pp[MAX_MON_MOVES];
+    u16 moves[MAX_SELECTABLE_MOVES];
+    u8 pp[MAX_SELECTABLE_MOVES];
     u8 ppBonuses;
 };
 
 struct ChooseMoveStruct
 {
-    u16 moves[MAX_MON_MOVES];
-    u8 currentPp[MAX_MON_MOVES];
-    u8 maxPp[MAX_MON_MOVES];
+    u16 moves[MAX_SELECTABLE_MOVES];
+    u8 currentPp[MAX_SELECTABLE_MOVES];
+    u8 maxPp[MAX_SELECTABLE_MOVES];
     u16 species;
     u8 monTypes[3];
     struct ZMoveData zmove;
