@@ -72,8 +72,8 @@ struct FollowerMsgInfoExtended
 #define MATCH_NOT_TYPES(type1, type2) MATCH_U8(MSG_COND_TYPE, type1, type2, TYPE_NONE | 1)
 #define MATCH_STATUS(status) MATCH_U24(MSG_COND_STATUS, status)
 #define MATCH_MAPSEC(mapsec) MATCH_U24(MSG_COND_MAPSEC, mapsec)
-#define MATCH_MAP_RAW(mapGroup, mapNum) MATCH_U8(MSG_COND_MAP, mapGroup, mapNum, 0)
-#define MATCH_MAP(map) MATCH_U8(MSG_COND_MAP, MAP_GROUP(map), MAP_NUM(map), 0)
+#define MATCH_MAP_RAW(MAP_mapGroup, mapNum) MATCH_U8(MSG_COND_MAP, mapGroup, mapNum, 0)
+#define MATCH_MAP(map) MATCH_U8(MSG_COND_MAP, MAP_GROUP(MAP_map), MAP_NUM(MAP_map), 0)
 // Matches one of two metatile behaviors follower is standing on
 #define MATCH_ON_MB(mb1, mb2) MATCH_U8(MSG_COND_ON_MB, mb1, mb2, 0)
 #define MATCH_WEATHER(weather1, weather2) MATCH_U8(MSG_COND_WEATHER, weather1, weather2, 0)
