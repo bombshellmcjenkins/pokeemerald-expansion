@@ -566,6 +566,8 @@ struct SaveBlock2
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
 
+extern u8 UpdateSpritePaletteWithTime(u8);
+
 struct SecretBaseParty
 {
     u32 personality[PARTY_SIZE];
@@ -642,7 +644,8 @@ struct Roamer
     /*0x12*/ u8 tough;
     /*0x13*/ bool8 active;
     /*0x14*/ u8 statusB; // Stores frostbite
-    /*0x14*/ u8 filler[0x7];
+    /*0x15*/ bool8 shiny;
+    /*0x16*/ u8 filler[0x6];
 };
 
 struct RamScriptData
@@ -651,6 +654,7 @@ struct RamScriptData
     u8 mapGroup;
     u8 mapNum;
     u8 objectId;
+    u8 localId;
     u8 script[995];
     //u8 padding;
 };
@@ -815,8 +819,7 @@ struct DayCare
 {
     struct DaycareMon mons[DAYCARE_MON_COUNT];
     u32 offspringPersonality;
-    u8 stepCounter;
-    //u8 padding[3];
+    u32 stepCounter;
 };
 
 struct LilycoveLadyQuiz
@@ -1120,7 +1123,7 @@ struct SaveBlock1
     // sizeof: 0x3???
 };
 
-extern struct SaveBlock1* gSaveBlock1Ptr;
+extern struct SaveBlock1 *gSaveBlock1Ptr;
 
 struct MapPosition
 {
@@ -1128,5 +1131,9 @@ struct MapPosition
     s16 y;
     s8 elevation;
 };
+
+#if T_SHOULD_RUN_MOVE_ANIM
+extern bool32 gLoadFail;
+#endif // T_SHOULD_RUN_MOVE_ANIM
 
 #endif // GUARD_GLOBAL_H

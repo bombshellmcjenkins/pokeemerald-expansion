@@ -274,7 +274,8 @@
 #define OBJ_EVENT_GFX_VAR_E  (OBJ_EVENT_GFX_VARS + 0xE)
 #define OBJ_EVENT_GFX_VAR_F  (OBJ_EVENT_GFX_VARS + 0xF)
 
-#define OBJ_EVENT_GFX_MON_BASE  0x200 // 512
+
+//#define OBJ_EVENT_GFX_MON_BASE  0x200 // 512
 
 // Don't use (1u << 15) to avoid conflict with BLEND_IMMUNE_FLAG.
 #define OBJ_EVENT_MON               (1u << 14)
@@ -325,6 +326,7 @@
 // Used for link player OWs in CreateLinkPlayerSprite
 #define OBJ_EVENT_ID_DYNAMIC_BASE 0xF0
 
+
 // Each object event template gets an ID that can be used to refer to it in scripts and elsewhere.
 // This is referred to as the "local id" (and it's really just 1 + its index in the templates array).
 // There are a few special IDs reserved for objects that don't have templates in the map data -- one for the player
@@ -338,35 +340,11 @@
 #define OBJ_EVENT_ID_FOLLOWER              0xFE
 #define OBJ_EVENT_ID_NPC_FOLLOWER          0xFD
 
-// Object event local ids referenced in C files
-#define LOCALID_ROUTE111_PLAYER_FALLING 45
-#define LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK 1
-#define LOCALID_FARAWAY_ISLAND_MEW 1
-#define LOCALID_UNION_ROOM_PLAYER_4 2
-#define LOCALID_UNION_ROOM_PLAYER_8 3
-#define LOCALID_UNION_ROOM_PLAYER_7 4
-#define LOCALID_UNION_ROOM_PLAYER_6 5
-#define LOCALID_UNION_ROOM_PLAYER_5 6
-#define LOCALID_UNION_ROOM_PLAYER_3 7
-#define LOCALID_UNION_ROOM_PLAYER_2 8
-#define LOCALID_UNION_ROOM_PLAYER_1 9
-#define LOCALID_BATTLE_TOWER_LOBBY_REPORTER 5
-#define LOCALID_TRUCK_BOX_TOP 1
-#define LOCALID_TRUCK_BOX_BOTTOM_L 2
-#define LOCALID_TRUCK_BOX_BOTTOM_R 3
-#define LOCALID_OLDALE_MART_CLERK 1
-#define LOCALID_LAVARIDGE_MART_CLERK 1
-#define LOCALID_FALLARBOR_MART_CLERK 1
-#define LOCALID_VERDANTURF_MART_CLERK 1
-#define LOCALID_PETALBURG_MART_CLERK 1
-#define LOCALID_SLATEPORT_MART_CLERK 1
-#define LOCALID_MAUVILLE_MART_CLERK 1
-#define LOCALID_RUSTBORO_MART_CLERK 1
-#define LOCALID_FORTREE_MART_CLERK 1
-#define LOCALID_MOSSDEEP_MART_CLERK 1
-#define LOCALID_SOOTOPOLIS_MART_CLERK 1
-#define LOCALID_BATTLE_FRONTIER_MART_CLERK 1
-#define LOCALID_SLATEPORT_ENERGY_GURU 25
+// Aliases for old names. "object event id" normally refers to an index into gObjectEvents, which these are not.
+// Used for link player OWs in CreateLinkPlayerSprite
+#define OBJ_EVENT_ID_DYNAMIC_BASE 0xF0
+#define OBJ_EVENT_ID_CAMERA LOCALID_CAMERA
+#define OBJ_EVENT_ID_PLAYER LOCALID_PLAYER
 
 // Aliases for old names. "object event id" normally refers to an index into gObjectEvents, which these are not.
 // Used for link player OWs in CreateLinkPlayerSprite
