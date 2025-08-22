@@ -3,6 +3,7 @@
 #include "heal_location.h"
 #include "constants/heal_locations.h"
 #include "constants/maps.h"
+#include "constants/map_event_ids.h"
 
 #include "data/heal_locations.h"
 #include "data/heal_locations_pkm_center.h"
