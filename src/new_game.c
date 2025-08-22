@@ -49,7 +49,7 @@
 extern const u8 EventScript_ResetAllMapFlags[];
 
 static void ClearFrontierRecord(void);
-static void WarpToTruck(void);
+//static void WarpToTruck(void);
 static void WarpToHome(void);
 static void ResetMiniGamesRecords(void);
 static void ResetItemFlags(void);
