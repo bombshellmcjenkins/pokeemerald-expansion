@@ -382,20 +382,23 @@ static bool8 MapHasSpecies(const struct WildPokemonHeader *info, u16 species)
         if (sPokedexAreaScreen->alteringCaveCounter != sPokedexAreaScreen->alteringCaveId + 1)
             return FALSE;
     }
+	
+	const struct WildEncounterTypes *monsInfo = info->encounterTypes;
 
-    if (MonListHasSpecies(info->landMonsInfo, species, LAND_WILD_COUNT))
+//    if (MonListHasSpecies(info->landMonsInfo, species, LAND_WILD_COUNT))
+    if (MonListHasSpecies(monsInfo->landMonsInfo, species, LAND_WILD_COUNT))
         return TRUE;
-    if (MonListHasSpecies(info->waterMonsInfo, species, WATER_WILD_COUNT))
+    if (MonListHasSpecies(monsInfo->waterMonsInfo, species, WATER_WILD_COUNT))
         return TRUE;
 // When searching the fishing encounters, this incorrectly uses the size of the land encounters.
 // As a result it's reading out of bounds of the fishing encounters tables.
 #ifdef BUGFIX
-    if (MonListHasSpecies(info->fishingMonsInfo, species, FISH_WILD_COUNT))
+    if (MonListHasSpecies(monsInfo->fishingMonsInfo, species, FISH_WILD_COUNT))
 #else
-    if (MonListHasSpecies(info->fishingMonsInfo, species, LAND_WILD_COUNT))
+    if (MonListHasSpecies(monsInfo->fishingMonsInfo, species, LAND_WILD_COUNT))
 #endif
         return TRUE;
-    if (MonListHasSpecies(info->rockSmashMonsInfo, species, ROCK_WILD_COUNT))
+    if (MonListHasSpecies(monsInfo->rockSmashMonsInfo, species, ROCK_WILD_COUNT))
         return TRUE;
     return FALSE;
 }

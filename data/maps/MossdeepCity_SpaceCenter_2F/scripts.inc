@@ -115,7 +115,8 @@ MossdeepCity_SpaceCenter_2F_EventScript_Gentleman::
 	faceplayer
 	goto_if_set FLAG_SYS_GAME_CLEAR, MossdeepCity_SpaceCenter_2F_EventScript_GentlemanNormal
 	goto_if_eq VAR_MOSSDEEP_CITY_STATE, 2, MossdeepCity_SpaceCenter_2F_EventScript_GentlemanMagma
-	goto_if_lt VAR_MOSSDEEP_CITY_STATE, 2, MossdeepCity_SpaceCenter_2F_EventScript_GentlemanNormal
+	compare VAR_MOSSDEEP_CITY_STATE, 2
+	goto_if_lt MossdeepCity_SpaceCenter_2F_EventScript_GentlemanNormal
 	goto MossdeepCity_SpaceCenter_2F_EventScript_GentlemanMagma
 	end
 

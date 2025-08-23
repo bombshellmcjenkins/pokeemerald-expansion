@@ -387,16 +387,16 @@ const u8 gBattleBackgroundNames[][30] =
 };
 const u8 gBattleBackgroundTerrainNames[][26] =
 {
-    [BATTLE_TERRAIN_GRASS]      = _("NORMAL - GRASS           "),
-    [BATTLE_TERRAIN_LONG_GRASS] = _("NORMAL - LONG GRASS      "),
-    [BATTLE_TERRAIN_SAND]       = _("NORMAL - SAND            "),
-    [BATTLE_TERRAIN_UNDERWATER] = _("NORMAL - UNDERWATER      "),
-    [BATTLE_TERRAIN_WATER]      = _("NORMAL - WATER           "),
-    [BATTLE_TERRAIN_POND]       = _("NORMAL - POND            "),
-    [BATTLE_TERRAIN_MOUNTAIN]   = _("NORMAL - MOUNTAIN        "),
-    [BATTLE_TERRAIN_CAVE]       = _("NORMAL - CAVE            "),
-    [BATTLE_TERRAIN_BUILDING]   = _("NORMAL - BUILDING        "),
-    [BATTLE_TERRAIN_PLAIN]      = _("NORMAL - PLAIN           "),
+    [BATTLE_ENVIRONMENT_GRASS]      = _("NORMAL - GRASS           "),
+    [BATTLE_ENVIRONMENT_LONG_GRASS] = _("NORMAL - LONG GRASS      "),
+    [BATTLE_ENVIRONMENT_SAND]       = _("NORMAL - SAND            "),
+    [BATTLE_ENVIRONMENT_UNDERWATER] = _("NORMAL - UNDERWATER      "),
+    [BATTLE_ENVIRONMENT_WATER]      = _("NORMAL - WATER           "),
+    [BATTLE_ENVIRONMENT_POND]       = _("NORMAL - POND            "),
+    [BATTLE_ENVIRONMENT_MOUNTAIN]   = _("NORMAL - MOUNTAIN        "),
+    [BATTLE_ENVIRONMENT_CAVE]       = _("NORMAL - CAVE            "),
+    [BATTLE_ENVIRONMENT_BUILDING]   = _("NORMAL - BUILDING        "),
+    [BATTLE_ENVIRONMENT_PLAIN]      = _("NORMAL - PLAIN           "),
 };
 const u8 sShadowSizeLabels[][4] =
 {
@@ -1019,14 +1019,14 @@ static void UpdateBattleBg(u8 taskId, bool8 increment)
     {
         if (increment)
         {
-            if (data->battleTerrain == BATTLE_TERRAIN_PLAIN)
+            if (data->battleTerrain == BATTLE_ENVIRONMENT_PLAIN)
                 data->battleBgType += 1;
             else
                 data->battleTerrain += 1;
         }
         else
         {
-            if (data->battleTerrain == BATTLE_TERRAIN_GRASS)
+            if (data->battleTerrain == BATTLE_ENVIRONMENT_GRASS)
                 data->battleBgType = MAP_BATTLE_SCENE_RAYQUAZA;
             else
                 data->battleTerrain -= 1;
@@ -1039,7 +1039,7 @@ static void UpdateBattleBg(u8 taskId, bool8 increment)
         else
         {
             data->battleBgType = MAP_BATTLE_SCENE_NORMAL;
-            data->battleTerrain = BATTLE_TERRAIN_PLAIN;
+            data->battleTerrain = BATTLE_ENVIRONMENT_PLAIN;
         }
     }
     else if (data->battleBgType == MAP_BATTLE_SCENE_RAYQUAZA)
@@ -1047,7 +1047,7 @@ static void UpdateBattleBg(u8 taskId, bool8 increment)
         if (increment)
         {
             data->battleBgType = MAP_BATTLE_SCENE_NORMAL;
-            data->battleTerrain = BATTLE_TERRAIN_GRASS;
+            data->battleTerrain = BATTLE_ENVIRONMENT_GRASS;
         }
         else
             data->battleBgType -= 1;
@@ -1245,7 +1245,7 @@ void CB2_Pokemon_Sprite_Visualizer(void)
 
             FillBgTilemapBufferRect(0, 0, 0, 0, 32, 20, 15);
             InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-            LoadBattleBg(0, BATTLE_TERRAIN_GRASS);
+            LoadBattleBg(0, BATTLE_ENVIRONMENT_GRASS);
 
             gMain.state++;
             break;

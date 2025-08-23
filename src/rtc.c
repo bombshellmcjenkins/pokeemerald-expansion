@@ -18,7 +18,8 @@ COMMON_DATA struct Time gLocalTime = {0};
 
 static const struct SiiRtcInfo sRtcDummy = {0, MONTH_JAN, 1}; // 2000 Jan 1
 
-static const s32 sNumDaysInMonths[MONTH_COUNT] =
+//static const s32 sNumDaysInMonths[MONTH_COUNT] =
+const s32 sNumDaysInMonths[MONTH_COUNT] =
 {
     [MONTH_JAN - 1] = 31,
     [MONTH_FEB - 1] = 28,

@@ -1,4 +1,5 @@
-	.set ALLOCATE_SCRIPT_CMD_TABLE, 0
+	@ this was 0. trying 1. script_cmd_table is fucked
+	.set ALLOCATE_SCRIPT_CMD_TABLE, 1
 	.include "data/script_cmd_table.inc"
 
 	@ Does nothing.
