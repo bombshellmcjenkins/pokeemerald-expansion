@@ -20,6 +20,8 @@ struct PartyMenu
     s16 learnMoveState;  // data2, used only as a learn move state
 };
 
+#define DATA1_PARTY_MENU_FROM_FIELD -1
+
 extern struct PartyMenu gPartyMenu;
 extern bool8 gPartyMenuUseExitCallback;
 extern u8 gSelectedMonPartyId;
@@ -102,5 +104,11 @@ void MoveDeleterForgetMove(void);
 void BufferMoveDeleterNicknameAndMove(void);
 void GetNumMovesSelectedMonHas(void);
 void MoveDeleterChooseMoveToForget(void);
+
+bool32 SetUpFieldMove_Surf(void);
+bool32 SetUpFieldMove_Fly(void);
+bool32 SetUpFieldMove_Waterfall(void);
+bool32 SetUpFieldMove_Dive(void);
+bool32 SetUpFieldMove_RockClimb(void);
 
 #endif // GUARD_PARTY_MENU_H

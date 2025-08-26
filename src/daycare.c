@@ -592,6 +592,7 @@ static void UNUSED TriggerPendingDaycareMaleEgg(void)
 
 // Removes the selected index from the given IV list and shifts the remaining
 // elements to the left.
+/*
 static void RemoveIVIndexFromList(u8 *ivs, u8 selectedIv)
 {
     s32 i, j;
@@ -610,6 +611,7 @@ static void RemoveIVIndexFromList(u8 *ivs, u8 selectedIv)
             ivs[j++] = temp[i];
     }
 }
+*/
 
 static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
 {

@@ -25,6 +25,7 @@
 #include "constants/event_objects.h"
 #include "constants/event_object_movement.h"
 #include "constants/field_effects.h"
+#include "constants/field_move.h"
 #include "constants/field_poison.h"
 #include "constants/field_specials.h"
 #include "constants/field_tasks.h"
@@ -172,6 +173,8 @@ gStdScripts_End::
 	.include "data/maps/LittlerootTown_MaysHouse_1F/scripts.inc"
 	.include "data/maps/LittlerootTown_MaysHouse_2F/scripts.inc"
 	.include "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.inc"
+	.include "data/maps/LittlerootTown_PlayerHouse_1F/scripts.inc"
+	.include "data/maps/LittlerootTown_PlayerHouse_2F/scripts.inc"
 	.include "data/maps/OldaleTown_House1/scripts.inc"
 	.include "data/maps/OldaleTown_House2/scripts.inc"
 	.include "data/maps/OldaleTown_PokemonCenter_1F/scripts.inc"
@@ -1156,9 +1159,4 @@ EventScript_VsSeekerChargingDone::
 	.include "data/scripts/follower.inc"
 	.include "data/text/save.inc"
 	.include "data/text/birch_speech.inc"
-
-	.include "data/maps/LittlerootTown_PlayerHouse_1F/scripts.inc"
-
-	.include "data/maps/LittlerootTown_PlayerHouse_2F/scripts.inc"
-
 	.include "data/scripts/dexnav.inc"

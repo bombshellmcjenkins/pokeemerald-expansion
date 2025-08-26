@@ -50,7 +50,9 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/trainer_hill.h"
+#include "constants/map_types.h"
 #include "constants/weather.h"
+#include "config/follower_npc.h"
 #include "wild_encounter.h"
 
 enum {

@@ -265,16 +265,16 @@
 #define TRAINER_WALTER_4                    259
 #define TRAINER_WALTER_5                    260
 #define TRAINER_SIDNEY                      261
-#define TRAINER_PHOEBE                      262
+#define TRAINER_LIZA                        262
 #define TRAINER_GLACIA                      263
 #define TRAINER_DRAKE                       264
 #define TRAINER_ROXANNE_1                   265
 #define TRAINER_BRAWLY_1                    266
-#define TRAINER_WATTSON_1                   267
+#define TRAINER_WALLY_1                  	267
 #define TRAINER_FLANNERY_1                  268
 #define TRAINER_NORMAN_1                    269
 #define TRAINER_WINONA_1                    270
-#define TRAINER_TATE_AND_LIZA_1             271
+#define TRAINER_LUKE_AND_TEA_1              271
 #define TRAINER_JUAN_1                      272
 #define TRAINER_JERRY_1                     273
 #define TRAINER_TED                         274
@@ -858,17 +858,31 @@
 #define TRAINER_LEAF                        852
 #define TRAINER_BRENDAN_PLACEHOLDER         853
 #define TRAINER_MAY_PLACEHOLDER             854
-#define TRAINER_BRENDAN_CHAMPION_TORCHIC	855
+#define TRAINER_BRENDAN_CHAMPION_CYNDAQUIL	855
+#define TRAINER_ROY_LITTLEROOT_SQUIRTLE		856
+#define TRAINER_ROY_LITTLEROOT_TREECKO		857
+#define TRAINER_ROY_LITTLEROOT_CYNDAQUIL	858
+#define TRAINER_BRENDAN_CHAMPION_SQUIRTLE	859
+#define TRAINER_BRENDAN_CHAMPION_TREECKO	860
+#define TRAINER_MAY_CHAMPION_CYNDAQUIL		861
+#define TRAINER_MAY_CHAMPION_SQUIRTLE		862
+#define	TRAINER_MAY_CHAMPION_TREECKO		863
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT                      856
+#define TRAINERS_COUNT                      864
 
 // #define MAX_TRAINERS_COUNT                  864
 // I shifted about a hundred unused flags so we got hella room now
 #define MAX_TRAINERS_COUNT					961
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
+
+// Setting removed trainers to trainer none so existing code that references them doesn't break
+// Just don't go fight these guys until you update it probably
+#define TRAINER_WATTSON_1					TRAINER_NONE
+#define TRAINER_TATE_AND_LIZA_1				TRAINER_NONE
+#define TRAINER_PHOEBE						TRAINER_NONE
 
 #endif  // GUARD_CONSTANTS_OPPONENTS_H
