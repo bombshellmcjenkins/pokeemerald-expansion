@@ -802,7 +802,7 @@ static const u16 sFieldMoves[FIELD_MOVES_COUNT + 1] =
 
 struct
 {
-    bool8 (*fieldMoveFunc)(void);
+    bool32 (*fieldMoveFunc)(void);
     u8 msgId;
 } static const sFieldMoveCursorCallbacks[FIELD_MOVES_COUNT] =
 {

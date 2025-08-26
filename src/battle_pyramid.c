@@ -82,6 +82,7 @@ static void SetPyramidFacilityTrainers(void);
 static void ShowPostBattleHintText(void);
 static void UpdatePyramidWinStreak(void);
 static void GetInBattlePyramid(void);
+static void GetCurrentBattlePyramidLocation(void);
 static void UpdatePyramidLightRadius(void);
 static void ClearPyramidPartyHeldItems(void);
 static void SetPyramidFloorPalette(void);
@@ -1126,6 +1127,11 @@ static void GetInBattlePyramid(void)
     gSpecialVar_Result = InBattlePyramid();
 }
 
+static void GetCurrentBattlePyramidLocation(void)
+{
+    gSpecialVar_Result = CurrentBattlePyramidLocation();
+}
+
 static void UpdatePyramidLightRadius(void)
 {
     switch (gSpecialVar_0x8006)
@@ -1647,6 +1653,16 @@ u8 InBattlePyramid(void)
         return 2;
     else
         return FALSE;
+}
+
+u8 CurrentBattlePyramidLocation(void)
+{
+    if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
+        return PYRAMID_LOCATION_FLOOR;
+    else if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_TOP)
+        return PYRAMID_LOCATION_TOP;
+    else
+        return PYRAMID_LOCATION_NONE;
 }
 
 bool8 InBattlePyramid_(void)

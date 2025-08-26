@@ -4635,8 +4635,8 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Swords Dance
 - Slash
 
-=== TRAINER_PHOEBE ===
-Name: PHOEBE
+=== TRAINER_LIZA ===
+Name: Liza
 Class: Elite Four
 Pic: Elite Four Phoebe
 Gender: Female
@@ -4856,8 +4856,8 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 - Reversal
 - Bulk Up
 
-=== TRAINER_WATTSON_1 ===
-Name: WATTSON
+=== TRAINER_WALLY_1 ===
+Name: Wally
 Class: Leader
 Pic: Leader Wattson
 Gender: Male
@@ -5032,8 +5032,8 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Dragon Dance
 - Aerial Ace
 
-=== TRAINER_TATE_AND_LIZA_1 ===
-Name: TATE&LIZA
+=== TRAINER_LUKE_AND_TEA_1 ===
+Name: Luke & Téa
 Class: Leader
 Pic: Leader Tate And Liza
 Gender: Male
@@ -6299,8 +6299,8 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Ice Beam
 - Toxic
 
-=== TRAINER_BRENDAN_CHAMPION_TORCHIC ===
-Name: BRENDAN
+=== TRAINER_BRENDAN_CHAMPION_CYNDAQUIL ===
+Name: Brendan
 Class: Champion
 Pic: Brendan
 Gender: Male
@@ -6373,6 +6373,384 @@ Timid Nature
 - Luster Purge
 - Flip Turn
 - Recover
+
+=== TRAINER_MAY_CHAMPION_CYNDAQUIL ===
+Name: May
+Class: Champion
+Pic: May
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Smart Trainer
+
+Swampert @ Leftovers
+Level: 57
+Ability: Torrent
+EVs: 252 HP / 4 Atk / 252 SpD
+Impish Nature
+- Stealth Rock
+- Earthquake
+- Flip Turn
+- Knock Off
+
+Magcargo @ Focus Sash
+Ability: Weak Armor
+Modest Nature
+Level: 56
+EVs: 128 SpA / 128 SpD / 252 Spe
+Ball: Timer Ball
+- Lava Plume
+- Recover
+- Power Gem
+- Pain Split
+
+Roserade @ Heavy-Duty Boots
+Ability: Natural Cure
+Level: 56
+EVs: 252 HP / 120 Def / 136 Spe
+Ball: Nest Ball
+Bold Nature
+- Spikes
+- Giga Drain
+- Sludge Bomb
+- Synthesis
+
+Dusknoir @ Choice Band
+Adamant Nature
+Level: 56
+Ability: Pressure
+EVs: 252 HP / 56 Atk / 100 Def / 100 SpD
+Ball: Dusk Ball
+- Shadow Sneak
+- Trick
+- Brick Break
+- Thunder Punch
+
+Sneasler @ Air Balloon
+Level: 56
+Ability: Unburden
+EVs: 252 Atk / 4 SpD / 252 Spe
+Adamant Nature
+Ball: Quick Ball
+- Swords Dance
+- Close Combat
+- Throat Chop
+- Acrobatics
+
+Latias @ Weakness Policy
+Ability: Levitate
+Level: 58
+EVs: 252 HP / 232 Def / 24 Spe
+Timid Nature
+Ball: Master Ball
+- Calm Mind
+- Dragon Pulse
+- Recover
+- Aura Sphere
+
+=== TRAINER_BRENDAN_CHAMPION_SQUIRTLE ===
+Name: Brendan
+Class: Champion
+Pic: Brendan
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Smart Trainer
+
+Sceptile @ Life Orb
+Ability: Overgrow
+EVs: 252 Atk / 4 SpD / 252 Spe
+Level: 57
+Jolly Nature
+- Swords Dance
+- Dragon Claw
+- Earthquake
+- Rock Slide
+
+Whiscash @ Leftovers
+Ability: Oblivious
+EVs: 248 HP / 8 Def / 252 SpD
+Level: 56
+Sassy Nature
+Ball: Net Ball
+- Stealth Rock
+- Spikes
+- Stone Edge
+- Surf
+
+Houndoom @ Heavy-Duty Boots
+Ability: Flash Fire
+EVs: 104 Def / 152 SpA / 252 Spe
+IVs: 0 Atk
+Level: 56
+Ball: Timer Ball
+- Foul Play
+- Dark Pulse
+- Roar
+- Protect
+
+Dusknoir @ Choice Band
+Adamant Nature
+Level: 56
+Ability: Pressure
+EVs: 252 HP / 56 Atk / 100 Def / 100 SpD
+Ball: Dusk Ball
+- Shadow Sneak
+- Trick
+- Brick Break
+- Thunder Punch
+
+Sneasler @ Air Balloon
+Level: 56
+Ability: Unburden
+EVs: 252 Atk / 4 SpD / 252 Spe
+Adamant Nature
+Ball: Quick Ball
+- Swords Dance
+- Close Combat
+- Throat Chop
+- Acrobatics
+
+Latios @ Soul Dew
+Level: 58
+Ability: Levitate
+EVs: 4 Def / 252 SpA / 252 Spe
+Ball: Master Ball
+Timid Nature
+- Draco Meteor
+- Luster Purge
+- Flip Turn
+- Recover
+
+=== TRAINER_MAY_CHAMPION_SQUIRTLE ===
+Name: May
+Class: Champion
+Pic: May
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Smart Trainer
+
+Sceptile @ Life Orb
+Ability: Overgrow
+EVs: 252 Atk / 4 SpD / 252 Spe
+Level: 57
+Jolly Nature
+- Swords Dance
+- Dragon Claw
+- Earthquake
+- Rock Slide
+
+Whiscash @ Leftovers
+Ability: Oblivious
+EVs: 248 HP / 8 Def / 252 SpD
+Level: 56
+Sassy Nature
+Ball: Net Ball
+- Stealth Rock
+- Spikes
+- Stone Edge
+- Surf
+
+Houndoom @ Heavy-Duty Boots
+Ability: Flash Fire
+EVs: 104 Def / 152 SpA / 252 Spe
+IVs: 0 Atk
+Level: 56
+Ball: Timer Ball
+- Foul Play
+- Dark Pulse
+- Roar
+- Protect
+
+Dusknoir @ Choice Band
+Adamant Nature
+Level: 56
+Ability: Pressure
+EVs: 252 HP / 56 Atk / 100 Def / 100 SpD
+Ball: Dusk Ball
+- Shadow Sneak
+- Trick
+- Brick Break
+- Thunder Punch
+
+Sneasler @ Air Balloon
+Level: 56
+Ability: Unburden
+EVs: 252 Atk / 4 SpD / 252 Spe
+Adamant Nature
+Ball: Quick Ball
+- Swords Dance
+- Close Combat
+- Throat Chop
+- Acrobatics
+
+Latias @ Weakness Policy
+Ability: Levitate
+Level: 58
+EVs: 252 HP / 232 Def / 24 Spe
+Timid Nature
+Ball: Master Ball
+- Calm Mind
+- Dragon Pulse
+- Recover
+- Aura Sphere
+
+=== TRAINER_BRENDAN_CHAMPION_TREECKO ===
+Name: Brendan
+Class: Champion
+Pic: Brendan
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Smart Trainer
+
+Blaziken @ Custap Berry
+Jolly Nature
+Level: 57
+Ability: Blaze
+EVs: 202 HP / 202 Atk / 104 Spe
+- Flare Blitz
+- Brave Bird
+- U-turn
+- Reversal
+
+Tropius @ Mago Berry
+Ability: Harvest
+Level: 56
+EVs: 248 HP / 252 Def / 8 SpD
+Bold Nature
+Ball: Safari Ball
+- Leech Seed
+- Substitute
+- Air Slash
+- Protect
+
+Lanturn @ Leftovers
+Ability: Volt Absorb
+Level: 56
+EVs: 40 HP / 220 Def / 248 SpD
+IVs: 0 Atk
+Calm Nature
+Ball: Lure Ball
+- Volt Switch
+- Scald
+- Toxic
+- Heal Bell
+
+Dusknoir @ Choice Band
+Adamant Nature
+Level: 56
+Ability: Pressure
+EVs: 252 HP / 56 Atk / 100 Def / 100 SpD
+Ball: Dusk Ball
+- Shadow Sneak
+- Trick
+- Brick Break
+- Thunder Punch
+
+Sneasler @ Air Balloon
+Level: 56
+Ability: Unburden
+EVs: 252 Atk / 4 SpD / 252 Spe
+Adamant Nature
+Ball: Quick Ball
+- Swords Dance
+- Close Combat
+- Throat Chop
+- Acrobatics
+
+Latios @ Soul Dew
+Level: 58
+Ability: Levitate
+EVs: 4 Def / 252 SpA / 252 Spe
+Ball: Master Ball
+Timid Nature
+- Draco Meteor
+- Luster Purge
+- Flip Turn
+- Recover
+
+=== TRAINER_MAY_CHAMPION_TREECKO ===
+Name: May
+Class: Champion
+Pic: May
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Smart Trainer
+
+Blaziken @ Custap Berry
+Jolly Nature
+Level: 57
+Ability: Blaze
+EVs: 202 HP / 202 Atk / 104 Spe
+- Flare Blitz
+- Brave Bird
+- U-turn
+- Reversal
+
+Tropius @ Mago Berry
+Ability: Harvest
+Level: 56
+EVs: 248 HP / 252 Def / 8 SpD
+Bold Nature
+Ball: Safari Ball
+- Leech Seed
+- Substitute
+- Air Slash
+- Protect
+
+Lanturn @ Leftovers
+Ability: Volt Absorb
+Level: 56
+EVs: 40 HP / 220 Def / 248 SpD
+IVs: 0 Atk
+Calm Nature
+Ball: Lure Ball
+- Volt Switch
+- Scald
+- Toxic
+- Heal Bell
+
+Dusknoir @ Choice Band
+Adamant Nature
+Level: 56
+Ability: Pressure
+EVs: 252 HP / 56 Atk / 100 Def / 100 SpD
+Ball: Dusk Ball
+- Shadow Sneak
+- Trick
+- Brick Break
+- Thunder Punch
+
+Sneasler @ Air Balloon
+Level: 56
+Ability: Unburden
+EVs: 252 Atk / 4 SpD / 252 Spe
+Adamant Nature
+Ball: Quick Ball
+- Swords Dance
+- Close Combat
+- Throat Chop
+- Acrobatics
+
+Latias @ Weakness Policy
+Ability: Levitate
+Level: 58
+EVs: 252 HP / 232 Def / 24 Spe
+Timid Nature
+Ball: Master Ball
+- Calm Mind
+- Dragon Pulse
+- Recover
+- Aura Sphere
+
 
 === TRAINER_ANDREW ===
 Name: ANDREW
@@ -9575,6 +9953,45 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Calm Mind
 - Psychic
 - Future Sight
+
+=== TRAINER_ROY_LITTLEROOT_SQUIRTLE ===
+Name: Roy
+Class: Rival
+Pic: Expert M
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Basic Trainer
+
+Torchic
+Level: 5
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_ROY_LITTLEROOT_TREECKO ===
+Name: Roy
+Class: Rival
+Pic: Expert M
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Basic Trainer
+
+Totodile
+Level: 5
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_ROY_LITTLEROOT_CYNDAQUIL ===
+Name: Roy
+Class: Rival
+Pic: Expert M
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Basic Trainer
+
+Bulbasaur
+Level: 5
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
 === TRAINER_BRENDAN_ROUTE_103_MUDKIP ===
 Name: BRENDAN

@@ -1,11 +1,16 @@
 #ifndef GUARD_POKEMON_H
 #define GUARD_POKEMON_H
 
-#include "sprite.h"
-#include "constants/items.h"
-#include "constants/region_map_sections.h"
-#include "constants/map_groups.h"
 #include "contest_effect.h"
+#include "sprite.h"
+#include "constants/battle.h"
+#include "constants/cries.h"
+#include "constants/form_change_types.h"
+#include "constants/items.h"
+#include "constants/map_groups.h"
+#include "constants/regions.h"
+#include "constants/region_map_sections.h"
+#include "constants/trainers.h"
 
 #define GET_BASE_SPECIES_ID(speciesId) (GetFormSpeciesId(speciesId, 0))
 #define FORM_SPECIES_END (0xffff)
@@ -766,6 +771,7 @@ void SetBattleMonMoveSlot(struct BattlePokemon *mon, u16 move, u8 slot);
 void GiveMonInitialMoveset(struct Pokemon *mon);
 void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
 u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove);
+void RemoveIVIndexFromList(u8 *ivs, u8 selectedIv);
 void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move);
 void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 u8 CountAliveMonsInBattle(u8 caseId, u32 battler);
@@ -916,5 +922,7 @@ const u8 *GetMoveAnimationScript(u16 moveId);
 void UpdateDaysPassedSinceFormChange(u16 days);
 void TrySetDayLimitToFormChange(struct Pokemon *mon);
 u32 CheckDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler);
+void SavePlayerPartyMon(u32 index, struct Pokemon *mon);
+u32 IsSpeciesOfType(u32 species, u32 type);
 
 #endif // GUARD_POKEMON_H

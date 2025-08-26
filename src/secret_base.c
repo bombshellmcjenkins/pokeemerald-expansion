@@ -136,7 +136,7 @@ static const u8 sSecretBaseEntrancePositions[NUM_SECRET_BASE_GROUPS * 4] =
     [SECRET_BASE_SHRUB4]       = MAP_NUM(MAP_SECRET_BASE_SHRUB4),       0,  9,  6,
 };
 
-#define GET_BASE_MAP_NUM(MAP_group)    (sSecretBaseEntrancePositions[(group) + 0])
+#define GET_BASE_MAP_NUM(group)    (sSecretBaseEntrancePositions[(group) + 0])
 #define GET_BASE_WARP_ID(group)    (sSecretBaseEntrancePositions[(group) + 1])
 #define GET_BASE_COMPUTER_X(group) (sSecretBaseEntrancePositions[(group) + 2])
 #define GET_BASE_COMPUTER_Y(group) (sSecretBaseEntrancePositions[(group) + 3])

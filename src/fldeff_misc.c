@@ -1,4 +1,5 @@
 #include "global.h"
+#include "global.h"
 #include "gpu_regs.h"
 #include "palette.h"
 #include "script.h"
@@ -544,7 +545,7 @@ static void AdjustSecretPowerSpritePixelOffsets(void)
     }
 }
 
-bool8 SetUpFieldMove_SecretPower(void)
+bool32 SetUpFieldMove_SecretPower(void)
 {
     u8 mb;
 
